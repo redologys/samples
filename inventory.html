@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory - Mobile Experts Inc</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFD600",
+                        "hot-pink": "#FF00FF",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1a1a1a",
+                        "gray-light": "#F5F5F5",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0",
+                        "lg": "0",
+                        "xl": "0",
+                        "full": "0" 
+                    },
+                    animation: {
+                        'marquee': 'marquee 30s linear infinite',
+                        'glitch': 'glitch 0.2s steps(4)',
+                        'shake': 'shake 0.2s linear 3',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        glitch: {
+                            '0%, 100%': { transform: 'translate(0)' },
+                            '25%': { transform: 'translate(-3px, 3px)' },
+                            '50%': { transform: 'translate(3px, -3px)' },
+                            '75%': { transform: 'translate(-3px, -3px)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-4px)' },
+                            '75%': { transform: 'translateX(4px)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        * { transition: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .brutalist-nav-link:hover { background-color: black; color: #FFD600; }
+        .brutalist-card { border: 3px solid black; background: white; }
+        .brutalist-card:hover { transform: translate(-4px, -4px); box-shadow: 8px 8px 0px 0px black; border-color: #FFD600; }
+        .brutalist-btn:active { transform: translate(4px, 4px) !important; box-shadow: none !important; }
+        
+        /* Sticky Filter Bar */
+        .sticky-filters { position: sticky; top: 0; z-index: 30; }
+    </style>
+</head>
+<body class="bg-background-light font-display text-black antialiased selection:bg-black selection:text-primary relative overflow-x-hidden">
+
+    <!-- Mobile Call Float -->
+    <a href="tel:9297892786" class="md:hidden fixed bottom-6 right-6 z-50 flex h-14 w-auto px-4 items-center justify-center border-[3px] border-black bg-primary text-black shadow-[4px_4px_0px_0px_black] brutalist-btn font-bold uppercase">
+        <span class="mr-2">Call Us</span>
+        <span class="material-symbols-outlined text-xl">call</span>
+    </a>
+
+    <!-- Mobile Menu Drawer (Consistent) -->
+    <div id="mobile-menu" class="fixed inset-y-0 right-0 z-50 w-80 translate-x-full border-l-[3px] border-black bg-white shadow-[-8px_0px_0px_0px_rgba(0,0,0,0.1)] md:hidden">
+        <div class="flex h-full flex-col">
+            <div class="flex items-center justify-between border-b-[3px] border-black bg-primary p-6">
+                <h2 class="text-xl font-black uppercase">Menu</h2>
+                <button id="close-menu" class="text-black hover:bg-black hover:text-primary p-1 border-[2px] border-transparent hover:border-black">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+            <nav class="flex flex-col p-6 gap-4">
+                <a href="repairs.html" class="block border-[3px] border-black bg-white p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Repairs</a>
+                <a href="inventory.html" class="block border-[3px] border-black bg-primary p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Inventory</a>
+                <a href="sell.html" class="block border-[3px] border-black bg-white p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Sell</a>
+                <a href="contact.html" class="block border-[3px] border-black bg-white p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Contact</a>
+            </nav>
+        </div>
+    </div>
+    <div id="menu-overlay" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm"></div>
+
+    <div class="min-h-screen flex flex-col p-4 md:p-8">
+        <div class="mx-auto flex w-full max-w-[1400px] flex-col border-[3px] border-black bg-white shadow-[8px_8px_0px_0px_black] relative z-10">
+            
+            <!-- Marquee -->
+            <div class="w-full overflow-hidden border-b-[3px] border-black bg-black py-3">
+                <div class="whitespace-nowrap flex animate-marquee w-[200%] text-primary font-bold uppercase tracking-widest text-sm md:text-base">
+                    <span class="w-1/2 flex-shrink-0 text-center">MOBILE EXPERTS INC • BROOKLYN • OPEN 7 DAYS A WEEK • 347-555-0199 • </span>
+                    <span class="w-1/2 flex-shrink-0 text-center">MOBILE EXPERTS INC • BROOKLYN • OPEN 7 DAYS A WEEK • 347-555-0199 • </span>
+                </div>
+            </div>
+
+            <!-- Header -->
+            <header class="flex flex-col border-b-[3px] border-black md:flex-row bg-white relative z-40">
+                <div class="flex items-center justify-between border-b-[3px] border-black bg-primary px-6 py-5 md:w-auto md:border-b-0 md:border-r-[3px]">
+                    <div class="flex items-center gap-3 cursor-pointer hover:animate-glitch" onclick="window.location.href='index.html'">
+                        <span class="material-symbols-outlined text-4xl font-black">bolt</span>
+                        <h1 class="text-2xl font-black uppercase leading-none tracking-tighter">MOBILE<br>EXPERTS</h1>
+                    </div>
+                    <button id="open-menu" class="md:hidden p-2 hover:bg-black hover:text-white border-[3px] border-transparent hover:border-black rounded-none">
+                        <span class="material-symbols-outlined text-3xl">menu</span>
+                    </button>
+                </div>
+                <nav class="hidden md:flex flex-1 flex-row">
+                    <a href="repairs.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link">Repairs</a>
+                    <a href="inventory.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-primary px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                         <span class="mr-2 hidden material-symbols-outlined md:inline-block">inventory_2</span>
+                        Inventory
+                    </a>
+                    <a href="sell.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link">Sell</a>
+                    <a href="contact.html" class="flex flex-1 items-center justify-center bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link">Contact</a>
+                </nav>
+            </header>
+
+            <!-- Hero -->
+            <section class="bg-primary border-b-[3px] border-black p-12 min-h-[500px] flex flex-col justify-center text-center relative overflow-hidden">
+                <div class="absolute top-4 left-0 w-full text-center">
+                     <p class="text-xs font-black uppercase tracking-widest bg-black text-white inline-block px-3 py-1">Last Updated: Today 3:45 PM</p>
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black uppercase leading-[0.9] tracking-tighter mb-4 hover:animate-glitch">Current Stock<br>& Pricing</h1>
+                <p class="text-xl md:text-2xl font-bold uppercase mb-4">See what's available now • Updated daily</p>
+                <div class="bg-black text-white inline-block mx-auto px-4 py-2 font-black uppercase mb-8 border border-white">All items in stock at our Brooklyn location</div>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+                    <a href="tel:9297892786" class="brutalist-btn bg-black text-white border-[3px] border-black px-8 py-4 text-lg font-bold uppercase hover:bg-white hover:text-black shadow-[8px_8px_0px_0px_white] flex items-center justify-center gap-2">
+                         <span class="material-symbols-outlined">call</span> Call To Inquire
+                    </a>
+                    <a href="contact.html" class="brutalist-btn bg-transparent border-[3px] border-black px-8 py-4 text-lg font-bold uppercase hover:bg-black hover:text-white flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined">storefront</span> Visit Store
+                    </a>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-widest opacity-60">Prices and availability subject to change</p>
+            </section>
+
+             <!-- Stock Status Banner -->
+             <div class="bg-white border-b-[3px] border-black py-4 px-6 flex flex-wrap justify-center gap-4 md:gap-12 text-sm md:text-base font-black uppercase">
+                 <span class="flex items-center gap-2 text-green-600"><span class="material-symbols-outlined text-lg">check_circle</span> 47 Devices In Stock</span>
+                 <span class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">update</span> Updated Today at 3:45 PM</span>
+                 <span class="flex items-center gap-2 text-hot-pink"><span class="material-symbols-outlined text-lg">new_releases</span> New Arrivals Daily</span>
+             </div>
+
+            <!-- Sticky Category Filter -->
+            <div class="sticky-filters border-b-[3px] border-black bg-white p-4 flex flex-col md:flex-row gap-4 items-center justify-between shadow-[0px_4px_0px_0px_rgba(0,0,0,0.1)]">
+                <div class="flex overflow-x-auto gap-2 w-full md:w-auto no-scrollbar pb-2 md:pb-0">
+                    <button class="whitespace-nowrap px-4 py-2 border-[2px] border-black bg-primary font-bold uppercase text-sm hover:bg-black hover:text-white flex items-center gap-1">All Items</button>
+                    <button class="whitespace-nowrap px-4 py-2 border-[2px] border-black bg-white font-bold uppercase text-sm hover:bg-black hover:text-white flex items-center gap-1">Smartphones</button>
+                    <button class="whitespace-nowrap px-4 py-2 border-[2px] border-black bg-white font-bold uppercase text-sm hover:bg-black hover:text-white flex items-center gap-1">Tablets</button>
+                    <button class="whitespace-nowrap px-4 py-2 border-[2px] border-black bg-white font-bold uppercase text-sm hover:bg-black hover:text-white flex items-center gap-1">Laptops</button>
+                    <button class="whitespace-nowrap px-4 py-2 border-[2px] border-black bg-white font-bold uppercase text-sm hover:bg-black hover:text-white flex items-center gap-1">Gaming</button>
+                </div>
+                <div class="flex gap-2">
+                    <select class="border-[2px] border-black bg-white px-4 py-2 font-bold uppercase text-sm focus:ring-0 focus:outline-none">
+                        <option>Sort: Newest</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Condition</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Featured Stock Banner -->
+            <section class="bg-hot-pink border-b-[3px] border-black p-8">
+                <div class="flex justify-between items-center mb-8">
+                     <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white drop-shadow-[4px_4px_0px_black]">Just Arrived This Week</h2>
+                     <a href="#" class="hidden md:block text-white font-bold uppercase underline hover:text-black">See All New Stock →</a>
+                </div>
+               
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Highlight 1 -->
+                    <div class="brutalist-card p-6 flex flex-col relative group">
+                        <div class="absolute -top-4 -right-4 bg-primary border-[3px] border-black px-3 py-1 font-black uppercase text-sm shadow-[4px_4px_0px_0px_black] animate-blink">New Arrival</div>
+                        <div class="bg-gray-100 border-[3px] border-black h-48 mb-4 flex items-center justify-center"><span class="material-symbols-outlined text-6xl text-gray-400">smartphone</span></div>
+                        <h3 class="text-2xl font-black uppercase mb-1">iPhone 14 Pro Max</h3>
+                        <p class="text-sm font-bold mb-4 opacity-70">Deep Purple • Unlocked</p>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-3xl font-black text-hot-pink">$799</span>
+                            <span class="bg-green-100 text-green-800 border-2 border-green-800 px-2 py-0 text-xs font-bold uppercase">Excellent</span>
+                        </div>
+                        <a href="tel:9297892786" class="brutalist-btn bg-black text-white w-full py-2 font-bold uppercase hover:bg-white hover:text-black border-[3px] border-black text-center flex items-center justify-center gap-2"><span class="material-symbols-outlined text-sm">call</span> Call To Reserve</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Inventory Grid -->
+            <section class="p-8 border-b-[3px] border-black bg-white relative">
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Item 1 -->
+                    <div class="brutalist-card p-4 group relative">
+                        <div class="bg-gray-100 border-[3px] border-black aspect-square mb-4 relative flex items-center justify-center">
+                            <span class="absolute top-2 left-2 border-2 border-green-600 bg-green-50 text-green-700 px-2 py-0 text-xs font-black uppercase">Excellent</span>
+                            <span class="absolute top-2 right-2 bg-primary border border-black px-2 py-0 text-xs font-black uppercase">In Stock</span>
+                            <span class="material-symbols-outlined text-6xl text-gray-400">smartphone</span>
+                        </div>
+                        <h3 class="text-lg font-black uppercase mb-1">iPhone 14 Pro</h3>
+                        <p class="text-xs font-bold uppercase mb-2 opacity-60">128GB • Deep Purple • Unlocked</p>
+                        <p class="text-xs font-mono mb-3 text-gray-400">Item #: ME-1024</p>
+                        
+                        <div class="flex justify-between items-center mb-4 border-t-2 border-black pt-2">
+                             <div class="text-3xl font-black">$649</div>
+                             <div class="text-xs font-bold text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-sm">inventory</span> 2 Available</div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="tel:9297892786" class="bg-black text-white border-[2px] border-black py-2 font-bold uppercase hover:bg-white hover:text-black text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">call</span> Call</a>
+                            <a href="contact.html" class="bg-transparent text-black border-[2px] border-black py-2 font-bold uppercase hover:bg-black hover:text-white text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">storefront</span> Visit</a>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="brutalist-card p-4 group relative">
+                         <div class="bg-gray-100 border-[3px] border-black aspect-square mb-4 relative flex items-center justify-center">
+                            <span class="absolute top-2 left-2 border-2 border-blue-600 bg-blue-50 text-blue-700 px-2 py-0 text-xs font-black uppercase">Like New</span>
+                            <span class="absolute top-2 right-2 bg-orange-400 border border-black px-2 py-0 text-xs font-black uppercase">Low Stock</span>
+                            <span class="material-symbols-outlined text-6xl text-gray-400">android</span>
+                        </div>
+                        <h3 class="text-lg font-black uppercase mb-1">Galaxy S23</h3>
+                        <p class="text-xs font-bold uppercase mb-2 opacity-60">256GB • Phantom Black • Unlocked</p>
+                        <p class="text-xs font-mono mb-3 text-gray-400">Item #: ME-5521</p>
+                        
+                        <div class="flex justify-between items-center mb-4 border-t-2 border-black pt-2">
+                             <div class="text-3xl font-black">$549</div>
+                             <div class="text-xs font-bold text-orange-600 flex items-center gap-1"><span class="material-symbols-outlined text-sm">inventory</span> 1 Available</div>
+                        </div>
+                        
+                         <div class="grid grid-cols-2 gap-2">
+                            <a href="tel:9297892786" class="bg-black text-white border-[2px] border-black py-2 font-bold uppercase hover:bg-white hover:text-black text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">call</span> Call</a>
+                            <a href="contact.html" class="bg-transparent text-black border-[2px] border-black py-2 font-bold uppercase hover:bg-black hover:text-white text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">storefront</span> Visit</a>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="brutalist-card p-4 group relative">
+                         <div class="bg-gray-100 border-[3px] border-black aspect-square mb-4 relative flex items-center justify-center">
+                            <span class="absolute top-2 left-2 border-2 border-green-600 bg-green-50 text-green-700 px-2 py-0 text-xs font-black uppercase">Excellent</span>
+                             <span class="absolute top-2 right-2 bg-primary border border-black px-2 py-0 text-xs font-black uppercase">In Stock</span>
+                            <span class="material-symbols-outlined text-6xl text-gray-400">laptop_mac</span>
+                        </div>
+                        <h3 class="text-lg font-black uppercase mb-1">MacBook Air M1</h3>
+                        <p class="text-xs font-bold uppercase mb-2 opacity-60">16GB / 512GB • Space Gray</p>
+                        <p class="text-xs font-mono mb-3 text-gray-400">Item #: ME-9932</p>
+                        
+                        <div class="flex justify-between items-center mb-4 border-t-2 border-black pt-2">
+                             <div class="text-3xl font-black">$699</div>
+                             <div class="text-xs font-bold text-green-600 flex items-center gap-1"><span class="material-symbols-outlined text-sm">inventory</span> 3 Available</div>
+                        </div>
+                        
+                         <div class="grid grid-cols-2 gap-2">
+                            <a href="tel:9297892786" class="bg-black text-white border-[2px] border-black py-2 font-bold uppercase hover:bg-white hover:text-black text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">call</span> Call</a>
+                            <a href="contact.html" class="bg-transparent text-black border-[2px] border-black py-2 font-bold uppercase hover:bg-black hover:text-white text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">storefront</span> Visit</a>
+                        </div>
+                    </div>
+
+                     <!-- Item 4 -->
+                     <div class="brutalist-card p-4 group relative">
+                         <div class="bg-gray-100 border-[3px] border-black aspect-square mb-4 relative flex items-center justify-center">
+                            <span class="absolute top-2 left-2 border-2 border-yellow-600 bg-yellow-50 text-yellow-700 px-2 py-0 text-xs font-black uppercase">Good</span>
+                             <span class="absolute top-2 right-2 bg-red-500 text-white border border-black px-2 py-0 text-xs font-black uppercase">Last One</span>
+                            <span class="material-symbols-outlined text-6xl text-gray-400">gamepad</span>
+                        </div>
+                        <h3 class="text-lg font-black uppercase mb-1">PS5 Disc</h3>
+                        <p class="text-xs font-bold uppercase mb-2 opacity-60">With Controller • White</p>
+                        <p class="text-xs font-mono mb-3 text-gray-400">Item #: ME-4421</p>
+                        
+                        <div class="flex justify-between items-center mb-4 border-t-2 border-black pt-2">
+                             <div class="text-3xl font-black">$399</div>
+                             <div class="text-xs font-bold text-red-600 flex items-center gap-1"><span class="material-symbols-outlined text-sm">inventory</span> 1 Left</div>
+                        </div>
+                        
+                         <div class="grid grid-cols-2 gap-2">
+                            <a href="tel:9297892786" class="bg-black text-white border-[2px] border-black py-2 font-bold uppercase hover:bg-white hover:text-black text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">call</span> Call</a>
+                            <a href="contact.html" class="bg-transparent text-black border-[2px] border-black py-2 font-bold uppercase hover:bg-black hover:text-white text-center text-xs flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">storefront</span> Visit</a>
+                        </div>
+                    </div>
+                 </div>
+            </section>
+
+            <!-- How To Purchase -->
+            <section class="border-b-[3px] border-black bg-primary py-16 px-4 md:px-12">
+                <h2 class="text-4xl font-black uppercase text-center mb-12 tracking-tighter">How To Get These Items</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Option 1 -->
+                    <div class="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_0px_black] text-center">
+                         <span class="material-symbols-outlined text-5xl mb-4">storefront</span>
+                         <h3 class="text-xl font-black uppercase mb-2">Visit Our Store</h3>
+                         <p class="font-bold text-sm mb-4">123 Bedford Avenue, Brooklyn<br>Mon-Sun: 10AM-8PM</p>
+                         <p class="text-xs uppercase font-bold text-red-600 mb-6">First come, first served</p>
+                         <button onclick="window.location.href='contact.html'" class="w-full bg-black text-white border-[2px] border-black py-2 font-black uppercase hover:bg-white hover:text-black">Get Directions</button>
+                    </div>
+                     <!-- Option 2 -->
+                     <div class="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_0px_black] text-center transform md:-translate-y-4">
+                        <span class="material-symbols-outlined text-5xl mb-4">phone_in_talk</span>
+                        <h3 class="text-xl font-black uppercase mb-2">Call To Reserve</h3>
+                        <p class="font-bold text-sm mb-4">(929) 789-2786<br>Reserve by phone</p>
+                        <p class="text-xs uppercase font-bold text-green-600 mb-6">Pick up same day</p>
+                        <a href="tel:9297892786" class="block w-full bg-primary text-black border-[2px] border-black py-2 font-black uppercase hover:bg-black hover:text-white">Call Now</a>
+                   </div>
+                    <!-- Option 3 -->
+                    <div class="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_0px_black] text-center">
+                        <span class="material-symbols-outlined text-5xl mb-4">mail</span>
+                        <h3 class="text-xl font-black uppercase mb-2">Message Us</h3>
+                        <p class="font-bold text-sm mb-4">Text or email about items<br>Include item #</p>
+                        <p class="text-xs uppercase font-bold text-gray-500 mb-6">Fast response time</p>
+                        <button onclick="window.location.href='contact.html#contact-form'" class="w-full bg-black text-white border-[2px] border-black py-2 font-black uppercase hover:bg-white hover:text-black">Send Message</button>
+                   </div>
+                </div>
+            </section>
+
+             <!-- Pricing Transparency -->
+             <section class="border-b-[3px] border-black bg-white p-12 text-center">
+                 <h2 class="text-3xl font-black uppercase mb-8">Why Our Prices Are Fair</h2>
+                 <div class="flex flex-col md:flex-row justify-center gap-8 md:gap-16 font-bold uppercase">
+                     <div class="flex items-center justify-center gap-2"><span class="material-symbols-outlined text-primary">verified</span> Certified Refurbished Quality</div>
+                     <div class="flex items-center justify-center gap-2"><span class="material-symbols-outlined text-primary">verified</span> 1-Year Warranty Included</div>
+                     <div class="flex items-center justify-center gap-2"><span class="material-symbols-outlined text-primary">verified</span> No Hidden Fees</div>
+                 </div>
+                 <p class="mt-8 text-sm font-black text-gray-400">All prices firm - we don't negotiate</p>
+             </section>
+
+             <!-- Coming Soon -->
+             <section class="bg-black text-white p-12 border-b-[3px] border-black">
+                 <h2 class="text-3xl font-black uppercase text-center mb-8 text-primary">Expected This Week</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                     <div class="border border-white/20 p-4">
+                         <h3 class="font-black uppercase text-xl">iPhone 15 Pro</h3>
+                         <p class="text-primary font-bold">Arriving Friday</p>
+                     </div>
+                     <div class="border border-white/20 p-4">
+                         <h3 class="font-black uppercase text-xl">MacBook Pro M3</h3>
+                         <p class="text-primary font-bold">Arriving Monday</p>
+                     </div>
+                     <div class="border border-white/20 p-4">
+                         <h3 class="font-black uppercase text-xl">PS5 Bundle</h3>
+                         <p class="text-primary font-bold">Arriving Wednesday</p>
+                     </div>
+                 </div>
+                 <div class="text-center mt-8">
+                     <p class="font-bold uppercase mb-4 opacity-70">Call to reserve incoming stock</p>
+                     <a href="tel:9297892786" class="text-2xl font-black hover:text-primary">(929) 789-2786</a>
+                 </div>
+             </section>
+
+             <!-- Bulk Inquiry -->
+             <section class="bg-hot-pink text-white p-12 text-center border-b-[3px] border-black">
+                <h2 class="text-3xl md:text-5xl font-black uppercase mb-4">Looking to buy multiple devices?</h2>
+                <p class="text-xl mb-8 font-bold uppercase drop-shadow-md">We offer volume discounts for businesses</p>
+                <button onclick="window.location.href='contact.html'" class="brutalist-btn bg-black text-white border-[3px] border-black px-8 py-4 font-black uppercase hover:bg-white hover:text-black">Contact Us For Quotes</button>
+            </section>
+
+             <!-- Footer CTA -->
+             <footer class="bg-primary text-black p-12 text-center border-b-[3px] border-black">
+                 <h2 class="text-4xl md:text-6xl font-black uppercase mb-4 tracking-tighter">Visit Us Today</h2>
+                 <p class="text-xl font-bold uppercase mb-8">123 Bedford Avenue, Brooklyn, NY 11211</p>
+                 <button onclick="window.location.href='contact.html'" class="brutalist-btn bg-black text-white px-12 py-6 text-xl md:text-2xl font-black uppercase hover:bg-white hover:text-black border-[3px] border-black shadow-[8px_8px_0px_0px_white]">Get Directions</button>
+                 <p class="mt-8 font-bold uppercase text-lg">Or call: <a href="tel:9297892786" class="underline hover:no-underline">(929) 789-2786</a></p>
+            </footer>
+
+            <div class="bg-black text-white p-4 text-center">
+                 <p class="text-xs font-bold uppercase tracking-widest text-white/40">© 2026 MOBILE EXPERTS INC.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById('open-menu');
+        const closeBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('menu-overlay');
+
+        function toggleMenu() {
+            const isClosed = mobileMenu.classList.contains('translate-x-full');
+            if (isClosed) {
+                mobileMenu.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+    </script>
+</body>
+</html>

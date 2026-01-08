@@ -1,0 +1,494 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// AUTHENTICATION MODELS
+// ============================================
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  phone         String?   @unique
+  image         String?
+  password      String?
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts  Account[]
+  sessions  Session[]
+  bookings  Booking[]
+  devices   Device[]
+  orders    Order[]
+  reviews   Review[]
+}
+
+enum UserRole {
+  CUSTOMER
+  TECHNICIAN
+  ADMIN
+}
+
+// ============================================
+// BOOKING & REPAIR MODELS
+// ============================================
+
+model Device {
+  id        String   @id @default(cuid())
+  userId    String?
+  brand     String   // iPhone, Samsung, Google Pixel, etc.
+  model     String   // iPhone 15 Pro, Galaxy S24, etc.
+  color     String?
+  imei      String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User?     @relation(fields: [userId], references: [id])
+  bookings Booking[]
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  bookingNumber   String        @unique @default(cuid())
+  userId          String?
+  deviceId        String?
+  
+  // Customer Info (for guest bookings)
+  customerName    String
+  customerPhone   String
+  customerEmail   String
+  
+  // Device Info
+  deviceType      DeviceType
+  deviceBrand     String
+  deviceModel     String
+  
+  // Issue Info
+  issueType       IssueType
+  issueDescription String?
+  
+  // Scheduling
+  appointmentDate DateTime
+  appointmentTime String
+  estimatedTime   String?       // "30 minutes", "1-2 hours"
+  
+  // Pricing
+  estimatedPrice  Decimal?      @db.Decimal(10, 2)
+  finalPrice      Decimal?      @db.Decimal(10, 2)
+  
+  // Status
+  status          BookingStatus @default(PENDING)
+  
+  // Photos
+  photos          String[]      // URLs to uploaded photos
+  
+  // Tracking
+  trackingCode    String        @unique @default(cuid())
+  
+  // Timestamps
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  completedAt     DateTime?
+  
+  user            User?         @relation(fields: [userId], references: [id])
+  device          Device?       @relation(fields: [deviceId], references: [id])
+  statusHistory   StatusUpdate[]
+  notifications   Notification[]
+}
+
+enum DeviceType {
+  IPHONE
+  SAMSUNG
+  GOOGLE_PIXEL
+  OTHER_ANDROID
+  TABLET
+  OTHER
+}
+
+enum IssueType {
+  CRACKED_SCREEN
+  BATTERY_REPLACEMENT
+  WATER_DAMAGE
+  CHARGING_PORT
+  CAMERA
+  BACK_GLASS
+  SPEAKER
+  MICROPHONE
+  BUTTON_REPAIR
+  SOFTWARE_ISSUE
+  OTHER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  DIAGNOSTICS_COMPLETE
+  AWAITING_PARTS
+  REPAIR_IN_PROGRESS
+  QUALITY_CHECK
+  READY_FOR_PICKUP
+  COMPLETED
+  CANCELLED
+}
+
+model StatusUpdate {
+  id          String   @id @default(cuid())
+  bookingId   String
+  status      BookingStatus
+  message     String?
+  technicianId String?
+  createdAt   DateTime @default(now())
+
+  booking     Booking  @relation(fields: [bookingId], references: [id])
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  bookingId   String
+  type        NotificationType
+  channel     NotificationChannel
+  recipient   String           // Phone number or email
+  message     String
+  status      NotificationStatus @default(PENDING)
+  sentAt      DateTime?
+  createdAt   DateTime         @default(now())
+
+  booking     Booking          @relation(fields: [bookingId], references: [id])
+}
+
+enum NotificationType {
+  BOOKING_CONFIRMATION
+  REMINDER_24H
+  STATUS_UPDATE
+  READY_FOR_PICKUP
+  COMPLETED
+  PROMOTIONAL
+}
+
+enum NotificationChannel {
+  SMS
+  EMAIL
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// ============================================
+// SERVICES & PRICING
+// ============================================
+
+model Service {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  category      ServiceCategory
+  basePrice     Decimal  @db.Decimal(10, 2)
+  estimatedTime String   // "30 minutes", "1-2 hours"
+  warranty      String   // "90 days", "Lifetime"
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  devicePricing DeviceServicePricing[]
+}
+
+enum ServiceCategory {
+  SCREEN_REPAIR
+  BATTERY
+  CHARGING
+  CAMERA
+  BACK_GLASS
+  WATER_DAMAGE
+  OTHER_REPAIR
+  DIAGNOSTIC
+}
+
+model DeviceServicePricing {
+  id          String   @id @default(cuid())
+  serviceId   String
+  deviceBrand String
+  deviceModel String
+  price       Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  service     Service  @relation(fields: [serviceId], references: [id])
+
+  @@unique([serviceId, deviceBrand, deviceModel])
+}
+
+// ============================================
+// PRODUCTS & E-COMMERCE
+// ============================================
+
+model Product {
+  id            String          @id @default(cuid())
+  name          String
+  slug          String          @unique
+  description   String
+  category      ProductCategory
+  brand         String?
+  compatibleWith String[]       // Device models this is compatible with
+  price         Decimal         @db.Decimal(10, 2)
+  comparePrice  Decimal?        @db.Decimal(10, 2)
+  images        String[]
+  stock         Int             @default(0)
+  isActive      Boolean         @default(true)
+  isFeatured    Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+}
+
+enum ProductCategory {
+  PHONE_CASE
+  SCREEN_PROTECTOR
+  CHARGER
+  CABLE
+  HEADPHONES
+  PORTABLE_BATTERY
+  MOUNT
+  OTHER_ACCESSORY
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  sessionId String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  userId          String?
+  
+  // Customer Info
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  
+  // Payment
+  subtotal        Decimal     @db.Decimal(10, 2)
+  tax             Decimal     @db.Decimal(10, 2)
+  total           Decimal     @db.Decimal(10, 2)
+  stripePaymentId String?
+  paymentStatus   PaymentStatus @default(PENDING)
+  
+  // Status
+  status          OrderStatus @default(PENDING)
+  
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user            User?       @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  productId String
+  name      String
+  price     Decimal  @db.Decimal(10, 2)
+  quantity  Int
+  createdAt DateTime @default(now())
+
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+// ============================================
+// BILL PAYMENT
+// ============================================
+
+model BillPayment {
+  id              String      @id @default(cuid())
+  paymentNumber   String      @unique
+  
+  // Customer Info
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  
+  // Payment Details
+  carrier         Carrier
+  phoneNumber     String
+  amount          Decimal     @db.Decimal(10, 2)
+  fee             Decimal     @db.Decimal(10, 2)  @default(0)
+  total           Decimal     @db.Decimal(10, 2)
+  
+  stripePaymentId String?
+  status          PaymentStatus @default(PENDING)
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+enum Carrier {
+  VERIZON
+  ATT
+  TMOBILE
+  METRO_PCS
+  CRICKET
+  BOOST_MOBILE
+  SIMPLE_MOBILE
+  OTHER
+}
+
+// ============================================
+// REVIEWS & TESTIMONIALS
+// ============================================
+
+model Review {
+  id          String   @id @default(cuid())
+  userId      String?
+  customerName String
+  rating      Int      // 1-5
+  comment     String
+  source      String   @default("website") // google, yelp, website
+  isApproved  Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User?    @relation(fields: [userId], references: [id])
+}
+
+// ============================================
+// TIME SLOTS & AVAILABILITY
+// ============================================
+
+model TimeSlot {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  time        String   // "09:00", "09:30", etc.
+  isAvailable Boolean  @default(true)
+  maxBookings Int      @default(2)
+  currentBookings Int  @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([date, time])
+}
+
+// ============================================
+// BUSINESS SETTINGS
+// ============================================
+
+model BusinessHours {
+  id        String   @id @default(cuid())
+  dayOfWeek Int      // 0 = Sunday, 6 = Saturday
+  openTime  String   // "09:00"
+  closeTime String   // "21:00"
+  isClosed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([dayOfWeek])
+}
+
+model BusinessSettings {
+  id                String   @id @default(cuid())
+  businessName      String
+  address           String
+  city              String
+  state             String
+  zipCode           String
+  phone             String
+  email             String
+  website           String?
+  googleMapsUrl     String?
+  googlePlaceId     String?
+  googleRating      Decimal? @db.Decimal(2, 1)
+  googleReviewCount Int?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Experts Inc - Brutalist Design</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffd400",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#1a1a1a",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0", // Brutalist = sharp
+                        "lg": "0",
+                        "xl": "0",
+                        "full": "0" 
+                    },
+                    animation: {
+                        'marquee': 'marquee 30s linear infinite',
+                        'glitch': 'glitch 0.2s steps(4)',
+                        'hard-slide': 'hard-slide 0.15s linear forwards',
+                        'shake': 'shake 0.2s linear 3',
+                        'blink': 'blink-border 0.6s steps(4) infinite',
+                        'loading': 'loading-steps 1s steps(3) infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        glitch: {
+                            '0%, 100%': { transform: 'translate(0)' },
+                            '25%': { transform: 'translate(-3px, 3px)' },
+                            '50%': { transform: 'translate(3px, -3px)' },
+                            '75%': { transform: 'translate(-3px, -3px)' },
+                        },
+                        'hard-slide': {
+                            'from': { transform: 'translateY(20px)', opacity: '0' },
+                            'to': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-4px)' },
+                            '75%': { transform: 'translateX(4px)' },
+                        },
+                        'blink-border': {
+                            '0%, 50%, 100%': { borderColor: 'black' },
+                            '25%, 75%': { borderColor: '#ffd400' },
+                        },
+                        'loading-steps': {
+                            '0%': { transform: 'scaleX(0)' },
+                            '33%': { transform: 'scaleX(0.33)' },
+                            '66%': { transform: 'scaleX(0.66)' },
+                            '100%': { transform: 'scaleX(1)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        /* CORE BRUTALIST RESETS */
+        * {
+            transition: none !important; /* Force kill default transitions */
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* HARD HOVERS */
+        .brutalist-nav-link:hover {
+            background-color: black;
+            color: #ffd400;
+        }
+
+        .brutalist-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px 0px black;
+        }
+        
+        /* Instant button press */
+        .brutalist-btn:active {
+            transform: translate(4px, 4px) !important;
+            box-shadow: none !important;
+        }
+
+        /* SCROLL ANIMATION CLASS */
+        .reveal-on-scroll {
+            opacity: 0;
+            /* transform is handled by animation */
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1; /* Fallback */
+            animation: hard-slide 0.15s linear forwards;
+        }
+
+        /* MENU DRAWER ANIMATION */
+        @keyframes slide-in-from-right {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        .drawer-open {
+            animation: slide-in-from-right 0.15s linear forwards;
+        }
+
+        /* UTILITIES */
+        .text-stroke {
+            -webkit-text-stroke: 1px black;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-black antialiased selection:bg-black selection:text-primary relative overflow-x-hidden">
+
+    <!-- Sticky Mobile Call Button -->
+    <a href="tel:347-555-0199" class="md:hidden fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center border-[3px] border-black bg-primary text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] brutalist-btn">
+        <span class="material-symbols-outlined text-2xl">call</span>
+    </a>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="fixed inset-y-0 right-0 z-50 w-80 translate-x-full border-l-[3px] border-black bg-white shadow-[-8px_0px_0px_0px_rgba(0,0,0,0.1)] md:hidden">
+        <div class="flex h-full flex-col">
+            <div class="flex items-center justify-between border-b-[3px] border-black bg-primary p-6">
+                <h2 class="text-xl font-black uppercase">Menu</h2>
+                <button id="close-menu" class="text-black hover:bg-black hover:text-primary p-1 border-[2px] border-transparent hover:border-black">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+            <nav class="flex flex-col p-6 gap-4">
+                <a href="#" class="block border-[3px] border-black bg-white p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Repairs</a>
+                <a href="inventory.html" class="block border-[3px] border-black bg-white p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Inventory</a>
+                <a href="#" class="block border-[3px] border-black bg-white p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Sell</a>
+                <a href="#" class="block border-[3px] border-black bg-white p-4 text-center text-lg font-bold uppercase brutalist-nav-link">Contact</a>
+            </nav>
+        </div>
+    </div>
+    
+    <!-- Overlay -->
+    <div id="menu-overlay" class="fixed inset-0 z-40 hidden bg-black/50 backdrop-blur-sm"></div>
+
+    <div class="min-h-screen flex flex-col p-4 md:p-8">
+        <!-- Main Container -->
+        <div class="mx-auto flex w-full max-w-[1400px] flex-col border-[3px] border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative z-10">
+            
+            <!-- Marquee -->
+            <div class="w-full overflow-hidden border-b-[3px] border-black bg-black py-3 relative z-50">
+                <div class="whitespace-nowrap flex animate-marquee w-[200%]">
+                    <div class="flex-shrink-0 w-[50%] text-center flex justify-around text-sm font-bold uppercase tracking-widest text-primary md:text-base">
+                        <span>MOBILE EXPERTS INC • BROOKLYN, NY • OPEN 7 DAYS A WEEK • 347-555-0199</span>
+                        <span>•</span>
+                        <span>WALK-INS WELCOME • INSTANT QUOTES</span>
+                        <span>•</span>
+                    </div>
+                    <div class="flex-shrink-0 w-[50%] text-center flex justify-around text-sm font-bold uppercase tracking-widest text-primary md:text-base">
+                        <span>MOBILE EXPERTS INC • BROOKLYN, NY • OPEN 7 DAYS A WEEK • 347-555-0199</span>
+                        <span>•</span>
+                        <span>WALK-INS WELCOME • INSTANT QUOTES</span>
+                        <span>•</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TopNavBar -->
+            <header class="flex flex-col border-b-[3px] border-black md:flex-row sticky top-0 z-40 bg-white">
+                <div class="flex items-center justify-between border-b-[3px] border-black bg-primary px-6 py-5 md:w-auto md:border-b-0 md:border-r-[3px] md:py-6">
+                    <div class="flex items-center gap-3 hover:animate-glitch cursor-pointer" onclick="window.location.href='index.html'">
+                        <span class="material-symbols-outlined text-4xl font-black">bolt</span>
+                        <h1 class="text-2xl font-black uppercase leading-none tracking-tighter">MOBILE<br>EXPERTS</h1>
+                    </div>
+                    <button id="open-menu" class="md:hidden p-2 hover:bg-black hover:text-white border-[3px] border-transparent hover:border-black rounded-none">
+                        <span class="material-symbols-outlined text-3xl">menu</span>
+                    </button>
+                </div>
+                <nav class="hidden md:flex flex-1 flex-row">
+                    <a href="repairs.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">build</span>
+                        Repairs
+                    </a>
+                    <a href="inventory.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">inventory_2</span>
+                        Inventory
+                    </a>
+                    <a href="sell.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">payments</span>
+                        Sell
+                    </a>
+                    <a href="contact.html" class="flex flex-1 items-center justify-center bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">mail</span>
+                        Contact
+                    </a>
+                </nav>
+            </header>
+
+            <!-- Hero Split -->
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <!-- Yellow Section -->
+                <div class="reveal-on-scroll relative flex flex-col justify-between border-b-[3px] border-black bg-primary p-8 md:p-12 lg:border-b-0 lg:border-r-[3px] lg:p-16">
+                    <div class="flex flex-col gap-6 relative z-10">
+                        <div class="inline-block w-fit border-[3px] border-black bg-black px-3 py-1 text-xs font-bold uppercase text-white hover:animate-shake cursor-help">
+                            Priority Service
+                        </div>
+                        <h2 class="max-w-xl text-5xl font-black uppercase leading-[0.9] tracking-tighter text-black md:text-7xl lg:text-8xl hover:animate-glitch cursor-default">
+                            Same-Day<br>Repairs
+                        </h2>
+                        <p class="max-w-md text-lg font-bold uppercase leading-tight text-black/80 md:text-xl">
+                            Screens, Batteries, & Logic Boards fixed in less than 1 hour.
+                        </p>
+                    </div>
+                    <div class="mt-12 flex flex-col items-start gap-4 sm:flex-row relative z-10">
+                        <button onclick="window.location.href='repairs.html'" class="brutalist-btn flex w-full cursor-pointer items-center justify-center gap-2 border-[3px] border-black bg-black px-8 py-4 text-lg font-bold uppercase text-white shadow-[8px_8px_0px_0px_#ffffff] hover:bg-white hover:text-black hover:shadow-[4px_4px_0px_0px_black] sm:w-auto">
+                            Book Now
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dark Section -->
+                <div class="reveal-on-scroll relative flex min-h-[400px] flex-col justify-end overflow-hidden border-b-[3px] border-black bg-[#1a1a1a] p-8 md:p-12 lg:border-b-0 lg:p-16">
+                    <div class="absolute inset-0 z-0 bg-cover bg-center grayscale filter hover:grayscale-0" 
+                         style='background-image: url("https://lh3.googleusercontent.com/gps-cs-s/AG0ilSx_aOqkut9vq7fL-b46fspPebjSjJNaF2m_T8xuMcRJajGaaGkfv1iPboCPUD_xsHOI1p5MzgonqLZnt5Tv5VmLEiBULgE4f32mIgcCvr6wW2_oecDEwdCOLGErw81DpHAXAm-mmLk13RQ=s680-w680-h510-rw"); background-attachment: fixed;'>
+                    </div>
+                    <div class="absolute inset-0 z-10 bg-black/60 hover:bg-black/40"></div>
+                    
+                    <div class="relative z-20 flex flex-col gap-6">
+                        <div class="inline-block w-fit border-[3px] border-white bg-white px-3 py-1 text-xs font-bold uppercase text-black">
+                            Clearance
+                        </div>
+                        <h2 class="text-4xl font-black uppercase leading-none tracking-tighter text-white md:text-6xl text-shadow hover:animate-glitch">
+                            Electronics<br>Under $300
+                        </h2>
+                        <div class="mt-4">
+                            <button onclick="window.location.href='inventory.html'" class="brutalist-btn flex w-full cursor-pointer items-center justify-center gap-2 border-[3px] border-primary bg-primary px-8 py-4 text-lg font-bold uppercase text-black shadow-[8px_8px_0px_0px_#ffffff] hover:bg-white hover:shadow-[4px_4px_0px_0px_black] sm:w-auto">
+                                View Inventory
+                                <span class="material-symbols-outlined">inventory_2</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-b-[3px] border-black">
+                <!-- Item 1 -->
+                <div class="reveal-on-scroll group flex flex-col items-start gap-4 border-b-[3px] border-black bg-white p-8 hover:bg-primary sm:border-r-[3px] lg:border-b-0">
+                    <div class="flex size-12 items-center justify-center border-[3px] border-black bg-white text-black group-hover:bg-black group-hover:text-primary">
+                        <span class="material-symbols-outlined text-3xl">smartphone</span>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black uppercase leading-none">iPhone<br>Repair</h3>
+                        <p class="mt-2 text-sm font-bold uppercase text-black/60 group-hover:text-black">From $49</p>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="reveal-on-scroll group flex flex-col items-start gap-4 border-b-[3px] border-black bg-white p-8 hover:bg-primary lg:border-b-0 lg:border-r-[3px]">
+                    <div class="flex size-12 items-center justify-center border-[3px] border-black bg-white text-black group-hover:bg-black group-hover:text-primary">
+                        <span class="material-symbols-outlined text-3xl">android</span>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black uppercase leading-none">Samsung<br>Repair</h3>
+                        <p class="mt-2 text-sm font-bold uppercase text-black/60 group-hover:text-black">Original Parts</p>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="reveal-on-scroll group flex flex-col items-start gap-4 border-b-[3px] border-black bg-white p-8 hover:bg-primary sm:border-r-[3px] lg:border-b-0">
+                    <div class="flex size-12 items-center justify-center border-[3px] border-black bg-white text-black group-hover:bg-black group-hover:text-primary">
+                        <span class="material-symbols-outlined text-3xl">laptop_mac</span>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black uppercase leading-none">MacBook<br>Repair</h3>
+                        <p class="mt-2 text-sm font-bold uppercase text-black/60 group-hover:text-black">Logic Boards</p>
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="reveal-on-scroll group flex flex-col items-start gap-4 bg-white p-8 hover:bg-primary">
+                    <div class="flex size-12 items-center justify-center border-[3px] border-black bg-white text-black group-hover:bg-black group-hover:text-primary">
+                        <span class="material-symbols-outlined text-3xl">sports_esports</span>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black uppercase leading-none">Game<br>Consoles</h3>
+                        <p class="mt-2 text-sm font-bold uppercase text-black/60 group-hover:text-black">HDMI & Power</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <section class="reveal-on-scroll border-b-[3px] border-black bg-white py-24 pl-8">
+                <div class="mb-12 pr-8">
+                    <h2 class="text-4xl font-black uppercase tracking-tighter md:text-6xl hover:animate-glitch w-fit">Hot Deals<br>This Week</h2>
+                </div>
+                
+                <div class="flex overflow-x-auto snap-x snap-mandatory gap-8 pb-12 no-scrollbar pr-8" id="productCarousel">
+                    <!-- Card 1 -->
+                    <div class="snap-start flex-none w-[300px] group cursor-pointer brutalist-card transition-none">
+                        <div class="relative w-full aspect-square border-[3px] border-black bg-white p-6 shadow-[8px_8px_0px_0px_#000000] group-hover:shadow-[none] transition-none mb-4">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center border-[3px] border-black overflow-hidden relative group-hover:bg-primary transition-none">
+                                <span class="material-symbols-outlined text-6xl text-gray-400 group-hover:text-black transition-none">smartphone</span>
+                                <div class="absolute top-2 right-2 bg-primary px-2 py-1 border-[2px] border-black text-xs font-bold uppercase animate-blink">Limited</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-xl font-bold uppercase leading-none">iPhone 13 Pro</h3>
+                            <div class="text-3xl font-black text-primary text-stroke">$499</div>
+                            <button class="brutalist-btn mt-2 w-full border-[3px] border-black bg-white py-2 font-bold uppercase hover:bg-black hover:text-white">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="snap-start flex-none w-[300px] group cursor-pointer brutalist-card transition-none">
+                        <div class="relative w-full aspect-square border-[3px] border-black bg-white p-6 shadow-[8px_8px_0px_0px_#000000] group-hover:shadow-[none] transition-none mb-4">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center border-[3px] border-black overflow-hidden relative group-hover:bg-primary transition-none">
+                                <span class="material-symbols-outlined text-6xl text-gray-400 group-hover:text-black">laptop_mac</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-xl font-bold uppercase leading-none">MacBook Air</h3>
+                            <div class="text-3xl font-black text-primary text-stroke">$699</div>
+                            <button class="brutalist-btn mt-2 w-full border-[3px] border-black bg-white py-2 font-bold uppercase hover:bg-black hover:text-white">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                     <!-- Card 3 -->
+                     <div class="snap-start flex-none w-[300px] group cursor-pointer brutalist-card transition-none">
+                        <div class="relative w-full aspect-square border-[3px] border-black bg-white p-6 shadow-[8px_8px_0px_0px_#000000] group-hover:shadow-[none] transition-none mb-4">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center border-[3px] border-black overflow-hidden relative group-hover:bg-primary transition-none">
+                                <span class="material-symbols-outlined text-6xl text-gray-400 group-hover:text-black">gamepad</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-xl font-bold uppercase leading-none">PS5 Console</h3>
+                            <div class="text-3xl font-black text-primary text-stroke">$399</div>
+                            <button class="brutalist-btn mt-2 w-full border-[3px] border-black bg-white py-2 font-bold uppercase hover:bg-black hover:text-white">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4 -->
+                    <div class="snap-start flex-none w-[300px] group cursor-pointer brutalist-card transition-none">
+                        <div class="relative w-full aspect-square border-[3px] border-black bg-white p-6 shadow-[8px_8px_0px_0px_#000000] group-hover:shadow-[none] transition-none mb-4">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center border-[3px] border-black overflow-hidden relative group-hover:bg-primary transition-none">
+                                <span class="material-symbols-outlined text-6xl text-gray-400 group-hover:text-black">headphones</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-xl font-bold uppercase leading-none">AirPods Max</h3>
+                            <div class="text-3xl font-black text-primary text-stroke">$429</div>
+                            <button class="brutalist-btn mt-2 w-full border-[3px] border-black bg-white py-2 font-bold uppercase hover:bg-black hover:text-white">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reviews -->
+            <section class="reveal-on-scroll border-b-[3px] border-black bg-primary py-24 px-8">
+                <div class="mx-auto max-w-6xl text-center">
+                    <h2 class="mb-4 text-4xl font-black uppercase tracking-tighter text-black md:text-6xl">Loved By Brooklyn</h2>
+                    
+                    <div class="mb-12 flex flex-col items-center justify-center">
+                        <div class="text-[8rem] font-black leading-none text-black hover:animate-pulse">5.0</div>
+                        <p class="text-xl font-bold uppercase tracking-widest text-black/70">From 29+ Google Reviews</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                        <div class="group relative border-[3px] border-black bg-white p-8 text-left shadow-[8px_8px_0px_0px_#000000] hover:transform hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-none">
+                            <div class="flex gap-1 text-primary mb-4">
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                            </div>
+                            <blockquote class="mb-6 text-lg font-bold leading-tight uppercase">"Fixed my iPhone screen in 30 mins. Best price in Williamsburg hands down."</blockquote>
+                            <div class="border-t-[3px] border-black pt-4">
+                                <cite class="not-italic font-bold">Michael R.</cite>
+                            </div>
+                        </div>
+
+                         <div class="group relative border-[3px] border-black bg-white p-8 text-left shadow-[8px_8px_0px_0px_#000000] hover:transform hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-none">
+                            <div class="flex gap-1 text-primary mb-4">
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                            </div>
+                            <blockquote class="mb-6 text-lg font-bold leading-tight uppercase">"Very good service, amazing customer service beautiful cases."</blockquote>
+                            <div class="border-t-[3px] border-black pt-4">
+                                <cite class="not-italic font-bold">Kiana Santiago</cite>
+                            </div>
+                        </div>
+
+                         <div class="group relative border-[3px] border-black bg-white p-8 text-left shadow-[8px_8px_0px_0px_#000000] hover:transform hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-none">
+                            <div class="flex gap-1 text-primary mb-4">
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                                <span class="material-symbols-outlined fill-current">star</span>
+                            </div>
+                            <blockquote class="mb-6 text-lg font-bold leading-tight uppercase">"Honest people. Told me I didn't need a new port, just a cleaning. Saved me $80."</blockquote>
+                            <div class="border-t-[3px] border-black pt-4">
+                                <cite class="not-italic font-bold">David Chen</cite>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Choose Us -->
+            <section class="reveal-on-scroll border-b-[3px] border-black bg-white">
+                <div class="border-b-[3px] border-black p-12 text-center">
+                     <h2 class="text-3xl font-black uppercase tracking-tighter md:text-5xl">Brooklyn's Best Mobile Experts</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                    <div class="group flex flex-col items-center gap-4 border-b-[3px] border-black p-8 text-center hover:bg-primary sm:border-r-[3px] lg:border-b-0">
+                        <span class="material-symbols-outlined text-5xl group-hover:hidden">schedule</span>
+                        <span class="material-symbols-outlined text-5xl hidden group-hover:block animate-glitch">schedule</span>
+                        <h3 class="text-xl font-black uppercase">Same-Day Service</h3>
+                        <p class="font-bold text-black/60 group-hover:text-black">Most repairs done in under 1 hour</p>
+                    </div>
+                     <div class="group flex flex-col items-center gap-4 border-b-[3px] border-black p-8 text-center hover:bg-primary border-r-0 lg:border-b-0 lg:border-r-[3px]">
+                        <span class="material-symbols-outlined text-5xl group-hover:hidden">attach_money</span>
+                        <span class="material-symbols-outlined text-5xl hidden group-hover:block animate-shake">attach_money</span>
+                        <h3 class="text-xl font-black uppercase">Fair Pricing</h3>
+                        <p class="font-bold text-black/60 group-hover:text-black">We work with you on prices</p>
+                    </div>
+                     <div class="group flex flex-col items-center gap-4 border-b-[3px] border-black p-8 text-center hover:bg-primary sm:border-r-[3px] lg:border-b-0">
+                        <span class="material-symbols-outlined text-5xl group-hover:hidden">handyman</span>
+                        <span class="material-symbols-outlined text-5xl hidden group-hover:block animate-glitch">handyman</span>
+                        <h3 class="text-xl font-black uppercase">Expert Techs</h3>
+                        <p class="font-bold text-black/60 group-hover:text-black">Certified technicians you can trust</p>
+                    </div>
+                     <div class="group flex flex-col items-center gap-4 p-8 text-center hover:bg-primary">
+                        <span class="material-symbols-outlined text-5xl group-hover:hidden">verified_user</span>
+                        <span class="material-symbols-outlined text-5xl hidden group-hover:block animate-shake">verified_user</span>
+                        <h3 class="text-xl font-black uppercase">90-Day Warranty</h3>
+                        <p class="font-bold text-black/60 group-hover:text-black">All repairs guaranteed</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Map Footer -->
+            <div class="flex flex-col md:flex-row border-black border-b-[3px] md:border-b-0">
+                <div class="flex flex-1 flex-col justify-center bg-black p-8 text-white md:border-r-[3px] md:border-black">
+                    <h4 class="mb-4 text-xl font-bold uppercase text-primary">Visit Us</h4>
+                    <address class="not-italic">
+                        <p class="text-lg font-medium">123 Bedford Avenue</p>
+                        <p class="text-lg font-medium">Brooklyn, NY 11211</p>
+                        <p class="mt-4 text-lg font-bold text-primary">347-555-0199</p>
+                        <p class="mt-2 text-sm text-gray-400">Mon-Sun: 10am - 8pm</p>
+                    </address>
+                </div>
+                <div class="relative min-h-[250px] w-full flex-1 overflow-hidden md:min-h-0">
+                    <div class="absolute inset-0 bg-cover bg-center grayscale" 
+                         style='background-image: url("https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyP8CetRRl26FaKjTRVh9d0_VddvUM_NmKXEb4XUDIUMOiMmeXwzvMn8pqVq6wkX10LPXI8kgV9SCY-6wiFP5E8E6phxgY3eg9PcacZcmxNpYt-OljNzNOCjC_XEGsyId-30YzqRK_D9DpU=s680-w680-h510-rw");'>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center bg-primary/20 p-4">
+                         <a href="#" class="brutalist-btn border-[3px] border-black bg-white px-6 py-3 text-sm font-bold uppercase text-black shadow-[4px_4px_0px_0px_#000000] hover:animate-shake hover:bg-primary">
+                            Get Directions
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mx-auto w-full max-w-[1400px] text-right p-4 bg-white">
+                <p class="text-xs font-bold uppercase tracking-widest text-black/40">© 2026 MOBILE EXPERTS INC. V2.0 // BRUTALIST EDITION</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu with Brutalist Slide
+        const menuBtn = document.getElementById('open-menu');
+        const closeBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('menu-overlay');
+
+        function openMenu() {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileMenu.classList.add('drawer-open');
+            overlay.classList.remove('hidden');
+        }
+
+        function closeMenu() {
+            mobileMenu.classList.add('translate-x-full');
+            mobileMenu.classList.remove('drawer-open');
+            overlay.classList.add('hidden');
+        }
+
+        menuBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+
+        // Intersection Observer for Hard Slide In
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
