@@ -1,31 +1,58 @@
 /**
- * ADVANCED TECHBOT LOGIC
- * Features: State management, Smart Fallbacks, Markdown rendering, Animations
+ * TECHBOT v2.0 - GROQ AI INTEGRATION
+ * Features: Llama-3 70b Reasoning, Context Awareness, Function Calling (simulated)
  */
 
 const TechBot = {
+    // Config
+    config: {
+        botName: 'TechBot',
+        // REPLACE THIS WITH YOUR REAL API KEY FOR LIVE AI
+        // Get one at https://console.groq.com/keys
+        groqKey: 'gsk_ReplaceWithYourActualKeyToEnableAI', 
+        apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
+        model: 'llama-3.1-70b-versatile'
+    },
+
     // State
     isOpen: false,
     history: [],
     
-    // Config
-    config: {
-        botName: 'TechBot',
-        address: '1134 Liberty Ave, Brooklyn, NY 11208',
-        phone: '(929) 789-2786',
-        hours: 'Mon-Sun: 10am - 8pm'
-    },
+    // System Prompt for Persona & Logic
+    systemPrompt: `
+    You are TechBot, the advanced AI assistant for "Mobile Experts", a premium repair shop in Brooklyn (1134 Liberty Ave).
+    
+    YOUR GOALS:
+    1. Help customers get repair quotes (screens, batteries, water damage).
+    2. Guide users to sell their devices using the "Trade-In Calculator".
+    3. Book appointments for urgent repairs (under 1 hour).
+    
+    KEY BEHAVIORS:
+    - Be professional, concise, and helpful. Use emojis occasionally.
+    - If user mentions "selling" or "trade-in", ALWAYS suggest checking the "Instant Quote Calculator" on the Sell page.
+    - If user asks for prices, give ranges (Screen: $80-$300, Battery: $50-$100) but emphasize they need to select their specific model for exact pricing.
+    - If user seems stressed or urgent (e.g., "broken phone", "need fix now"), offer the "Urgent Priority Slot" for today.
+    
+    FORMATTING:
+    - Use Markdown for bolding (**text**) and lists.
+    - Keep responses under 3 sentences unless explaining a process.
+    `,
 
     // Initialization
     init() {
         this.renderWidget();
         this.attachListeners();
-        this.addMessage('bot', "👋 Hi! I'm TechBot. Need a repair quote or store info?", [
-            "Get Repair Quote", "Sell My Device", "Store Hours", "Location"
-        ]);
+        // Initial greeting
+        setTimeout(() => {
+            if (!this.history.length) {
+                this.addMessage('bot', "👋 Hi! I'm TechBot. I can help with **Repair Quotes**, **Selling Devices**, or **Booking Appointments**. What do you need?", [
+                    "Broken Screen 📱", "Sell My Phone 💰", "Store Hours ⏰"
+                ]);
+            }
+        }, 1000);
     },
 
-    // Render HTML Structure
+    // Render Widget HTML
     renderWidget() {
         const div = document.createElement('div');
         div.className = 'techbot-widget';
@@ -36,14 +63,14 @@ const TechBot = {
                         <div class="techbot-avatar">🤖</div>
                         <div class="techbot-info">
                             <h3>${this.config.botName}</h3>
-                            <div class="techbot-status"><span class="status-dot"></span> Online</div>
+                            <div class="techbot-status"><span class="status-dot"></span> AI Online</div>
                         </div>
                     </div>
                     <button id="techbotClose" class="text-white hover:text-gray-300">✕</button>
                 </div>
                 <div class="techbot-messages" id="techbotMessages"></div>
                 <div class="techbot-input">
-                    <textarea id="techbot-textarea" rows="1" placeholder="Type a message..."></textarea>
+                    <textarea id="techbot-textarea" rows="1" placeholder="Ask anything..."></textarea>
                     <button class="techbot-send" id="techbotSend">➤</button>
                 </div>
             </div>
@@ -55,7 +82,7 @@ const TechBot = {
         document.body.appendChild(div);
     },
 
-    // Event Listeners
+    // Listeners
     attachListeners() {
         const toggle = document.getElementById('techbotToggle');
         const close = document.getElementById('techbotClose');
@@ -64,7 +91,6 @@ const TechBot = {
 
         toggle.addEventListener('click', () => this.toggleChat());
         close.addEventListener('click', () => this.toggleChat(false));
-        
         send.addEventListener('click', () => this.handleUserMessage());
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -74,7 +100,6 @@ const TechBot = {
         });
     },
 
-    // Toggle Window
     toggleChat(forceState) {
         this.isOpen = forceState !== undefined ? forceState : !this.isOpen;
         const windowEl = document.getElementById('techbotWindow');
@@ -83,115 +108,145 @@ const TechBot = {
         if (this.isOpen) {
             windowEl.classList.add('is-open');
             badge.style.display = 'none';
+            // Focus input
+            setTimeout(() => document.getElementById('techbot-textarea').focus(), 300);
         } else {
             windowEl.classList.remove('is-open');
         }
     },
 
-    // Handle User Message
     handleUserMessage() {
         const input = document.getElementById('techbot-textarea');
         const text = input.value.trim();
         if (!text) return;
 
+        // 1. Add User Message
         this.addMessage('user', text);
+        this.history.push({ role: 'user', content: text });
         input.value = '';
-        
+
+        // 2. Show Typing
         this.showTyping();
-        
-        // Simulate Network Delay
-        setTimeout(() => {
-            this.removeTyping();
-            this.generateResponse(text.toLowerCase());
-        }, 1200);
+
+        // 3. Call AI or Fallback
+        if (this.config.groqKey.startsWith('gsk_') && this.config.groqKey.length > 10 && !this.config.groqKey.includes("Replace")) {
+            this.callGroqAPI();
+        } else {
+            // FALLBACK MOCK MODE (If no key provided)
+            setTimeout(() => {
+                this.removeTyping();
+                this.mockResponse(text);
+            }, 1000);
+        }
     },
 
-    // Generate Smart Response (Mock NLP)
-    generateResponse(text) {
-        let response = "";
-        let quickReplies = [];
+    // GROQ API HANDLER
+    async callGroqAPI() {
+        try {
+            const response = await fetch(this.config.apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.config.groqKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: this.config.model,
+                    messages: [
+                        { role: 'system', content: this.systemPrompt },
+                        ...this.history
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 200
+                })
+            });
 
-        // Logic
-        if (text.includes('repair') || text.includes('fix') || text.includes('broken')) {
-            response = "📱 **Repair Services**\nWe fix screens, batteries, and more in under 1 hour! \n\nSelect your device to get an instant quote:";
-            quickReplies = ["iPhone Repair", "Samsung Repair", "Other Device"];
-        } else if (text.includes('sell') || text.includes('cash') || text.includes('worth')) {
-            response = "💰 **Sell Your Device**\nWe pay top dollar for used electronics. \n\nCheck our [Buyback Calculator](sell.html) for an instant offer!";
-            quickReplies = ["Check Prices", "Trade-In Info"];
-        } else if (text.includes('price') || text.includes('cost') || text.includes('much')) {
-            response = "For exact pricing, please use our **Instant Quote** tool on the homepage. \n\nTypical prices:\n• Screens: from $49\n• Batteries: from $39";
-            quickReplies = ["Get Quote"];
-        } else if (text.includes('location') || text.includes('where') || text.includes('address')) {
-            response = `📍 **Location**\nWe are located at:\n**${this.config.address}**\n\n(Near Grant Ave Station - A Train)`;
-            quickReplies = ["Get Directions", "Store Hours"];
-        } else if (text.includes('hours') || text.includes('open') || text.includes('time')) {
-            response = `⏰ **Store Hours**\n${this.config.hours}\nOpen 7 days a week!`;
-        } else {
-            response = "I can help with repairs, buying devices, or store info. What do you need?";
-            quickReplies = ["Repair Quote", "Location", "Sell Device"];
+            if (!response.ok) throw new Error('API Error');
+
+            const data = await response.json();
+            const botReply = data.choices[0].message.content;
+
+            this.removeTyping();
+            this.addMessage('bot', botReply);
+            this.history.push({ role: 'assistant', content: botReply });
+
+        } catch (error) {
+            console.error(error);
+            this.removeTyping();
+            this.addMessage('bot', "⚠️ **System Offline**: I'm having trouble connecting to the AI brain right now. Please call us at (929) 789-2786.");
+        }
+    },
+
+    // FALLBACK RESPONSES (No API Key)
+    mockResponse(text) {
+        text = text.toLowerCase();
+        let reply = "I can help with that! Please visit our store at 1134 Liberty Ave.";
+        let actions = [];
+
+        if (text.includes('sell') || text.includes('worth') || text.includes('trade')) {
+            reply = "💰 **Looking to sell?**\nWe offer the best rates in Brooklyn! Use our **Instant Quote Calculator** to see exactly how much your device is worth in seconds.";
+            actions = ["Go to Calculator", "View Prices"];
+        } else if (text.includes('screen') || text.includes('crack')) {
+            reply = "📱 **Broken Screen?**\nWe can fix that in under 30 minutes! \n\nScreen repairs start at $60. What model do you have?";
+            actions = ["iPhone 14", "iPhone 13", "Samsung S23"];
+        } else if (text.includes('booking') || text.includes('appointment')) {
+            reply = "📅 **Book a Repair**\nWe accept walk-ins, but booking guarantees your spot. We have openings today at 2:00 PM and 4:30 PM.";
+            actions = ["Book 2:00 PM", "Book 4:30 PM"];
+        } else if (text.includes('hour') || text.includes('open')) {
+            reply = "⏰ **We are Open!**\nMon-Sun: 10am - 8pm.\nCome visit us at 1134 Liberty Ave, Brooklyn.";
         }
 
-        this.addMessage('bot', response, quickReplies);
+        this.addMessage('bot', reply, actions);
     },
 
-    // Add Message to UI
+    // UI Helpers
     addMessage(type, text, quickReplies = []) {
-        const messagesContainer = document.getElementById('techbotMessages');
+        const container = document.getElementById('techbotMessages');
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${type}`;
         
-        // Simple Markdown Parsing
-        let formattedText = text
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>');
+        // Markdown Bold Parsing
+        msgDiv.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        
+        container.appendChild(msgDiv);
 
-        msgDiv.innerHTML = formattedText;
-        messagesContainer.appendChild(msgDiv);
-
-        // Add Quick Replies if Bot
         if (type === 'bot' && quickReplies.length > 0) {
             const qrDiv = document.createElement('div');
             qrDiv.className = 'quick-replies';
-            quickReplies.forEach(reply => {
+            quickReplies.forEach(r => {
                 const btn = document.createElement('button');
                 btn.className = 'quick-reply-btn';
-                btn.textContent = reply;
+                btn.textContent = r;
                 btn.onclick = () => {
-                    const input = document.getElementById('techbot-textarea');
-                    input.value = reply;
+                    document.getElementById('techbot-textarea').value = r;
                     this.handleUserMessage();
                 };
                 qrDiv.appendChild(btn);
             });
-            messagesContainer.appendChild(qrDiv);
+            container.appendChild(qrDiv);
         }
 
         this.scrollToBottom();
     },
 
-    // Typing Indicator
     showTyping() {
-        const messagesContainer = document.getElementById('techbotMessages');
-        const typingDiv = document.createElement('div');
-        typingDiv.className = 'typing';
-        typingDiv.id = 'techbotTyping';
-        typingDiv.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-        messagesContainer.appendChild(typingDiv);
+        const container = document.getElementById('techbotMessages');
+        const div = document.createElement('div');
+        div.className = 'typing';
+        div.id = 'techbotTyping';
+        div.innerHTML = '<span>●</span><span>●</span><span>●</span>';
+        container.appendChild(div);
         this.scrollToBottom();
     },
 
     removeTyping() {
-        const typing = document.getElementById('techbotTyping');
-        if (typing) typing.remove();
+        const el = document.getElementById('techbotTyping');
+        if (el) el.remove();
     },
 
     scrollToBottom() {
-        const messagesContainer = document.getElementById('techbotMessages');
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        const el = document.getElementById('techbotMessages');
+        el.scrollTop = el.scrollHeight;
     }
 };
 
-// Auto-Launch
-document.addEventListener('DOMContentLoaded', () => {
-    TechBot.init();
-});
+document.addEventListener('DOMContentLoaded', () => TechBot.init());
