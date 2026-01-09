@@ -60,42 +60,69 @@
         }
     </script>
     <style>
-        /* PREMIUM TRANSITIONS */
-        *, *::before, *::after { transition: transform 200ms ease-out, box-shadow 200ms ease-out, background-color 200ms ease-out, color 200ms ease-out, border-color 200ms ease-out, opacity 200ms ease-out; }
+        /* ========================================
+           PREMIUM DESIGN SYSTEM
+           ======================================== */
+        
+        /* BASE TRANSITIONS */
+        *, *::before, *::after { 
+            transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), 
+                        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1), 
+                        background-color 200ms ease-out, 
+                        color 200ms ease-out, 
+                        border-color 200ms ease-out, 
+                        opacity 200ms ease-out; 
+        }
         html { scroll-behavior: smooth; }
         
-        /* SCROLLBAR */
+        /* SCROLLBAR HIDE */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
+
+        /* SHADOW HIERARCHY */
+        .shadow-sm { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .shadow-md { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .shadow-lg { box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+
         /* NAV LINKS */
-        .brutalist-nav-link { position: relative; }
+        .brutalist-nav-link { position: relative; font-weight: 700; letter-spacing: 0.01em; }
+        .brutalist-nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 3px;
+            background: #ffd400; transition: all 250ms ease; transform: translateX(-50%);
+        }
         .brutalist-nav-link:hover { background-color: black; color: #ffd400; transform: translateY(-2px); }
+        .brutalist-nav-link:hover::after { width: 80%; }
         .brutalist-nav-link:active { transform: scale(0.98); }
         .brutalist-nav-link:focus { outline: 3px solid #ffd400; outline-offset: 2px; }
-        
+
         /* CARDS */
-        .brutalist-card { border: 3px solid black; background: white; }
-        .brutalist-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0px 0px black; }
+        .brutalist-card { border: 3px solid black; background: white; box-shadow: 4px 4px 0px 0px black; transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .brutalist-card:hover { transform: translate(-6px, -6px); box-shadow: 12px 12px 0px 0px black; }
         
         /* BUTTONS */
-        .brutalist-btn:hover { transform: translateY(-3px); }
+        .brutalist-btn { font-weight: 800; letter-spacing: 0.02em; cursor: pointer; }
+        .brutalist-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
         .brutalist-btn:active { transform: translate(2px, 2px) scale(0.98) !important; box-shadow: 2px 2px 0px black !important; }
         .brutalist-btn:focus { outline: 3px solid #ffd400; outline-offset: 2px; }
-        
-        /* SCROLL ANIMATION */
-        .reveal-on-scroll { opacity: 0; transform: translateY(20px); }
-        .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* SCROLL ANIMATIONS */
+        .reveal-on-scroll { opacity: 0; transform: translateY(30px); }
+        .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); transition: opacity 600ms ease-out, transform 600ms cubic-bezier(0.4, 0, 0.2, 1); }
 
         /* MENU DRAWER */
-        @keyframes slide-in-from-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        .drawer-open { animation: slide-in-from-right 0.2s ease-out forwards; }
+        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .drawer-open { animation: slideInRight 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-        /* Sticky Filter */
+        /* STICKY FILTER */
         .sticky-filters { position: sticky; top: 0; z-index: 30; }
+        .filter-btn { transition: all 200ms ease; }
+        .filter-btn:hover { transform: translateY(-2px); box-shadow: 4px 4px 0px 0px black; }
+        .filter-btn.active { background-color: black !important; color: #ffd400 !important; box-shadow: 4px 4px 0px 0px #ffd400; }
 
-        /* Filter Active State */
-        .filter-btn.active { background-color: black !important; color: #ffd400 !important; }
+        /* TYPOGRAPHY */
+        h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.1; }
+        p { line-height: 1.6; }
+        button, a { min-height: 44px; }
     </style>
 </head>
 <body class="bg-background-light font-display text-black antialiased selection:bg-black selection:text-primary relative overflow-x-hidden">
