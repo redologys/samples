@@ -134,87 +134,96 @@
                 <div class="absolute left-0 top-0 bottom-0 w-[40px] bg-primary border-r-[3px] border-black hidden md:block"></div>
                 <div class="w-full flex flex-col md:flex-row items-center p-8 md:p-16 relative z-10">
                     <div class="flex-1 mb-8 md:mb-0 md:pl-12">
-                        <div class="inline-block border-[2px] border-black bg-black text-white px-3 py-1 font-black uppercase text-xs mb-6">Mobile Solutions</div>
-                        <h1 class="text-5xl md:text-7xl font-black uppercase leading-[0.9] tracking-tighter mb-6">Phone Line<br>Services</h1>
-                        <p class="text-xl md:text-2xl font-bold uppercase text-gray-600 mb-8 max-w-xl">Activate new lines • Renew existing plans • Switch carriers hassle-free</p>
+                        <div class="inline-block border-[2px] border-black bg-black text-white px-3 py-1 font-black uppercase text-xs mb-6">Instant Service</div>
+                        <h1 class="text-5xl md:text-7xl font-black uppercase leading-[0.9] tracking-tighter mb-6">Phone Bill<br>Renewals</h1>
+                        <p class="text-xl md:text-2xl font-bold uppercase text-gray-600 mb-8 max-w-xl">Pay your bill instantly • No fees • All carriers supported</p>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <button onclick="document.getElementById('service-selector').scrollIntoView({behavior:'smooth'})" class="brutalist-btn bg-primary text-black border-[3px] border-black px-8 py-4 font-black uppercase text-lg shadow-[6px_6px_0px_black] hover:bg-black hover:text-white">Get Started</button>
-                            <a href="tel:7185550123" class="brutalist-btn bg-white text-black border-[3px] border-black px-8 py-4 font-black uppercase text-lg hover:bg-gray-100 flex items-center gap-2">
-                                <span class="material-symbols-outlined">call</span> (929) 789-2786
+                            <button onclick="document.getElementById('renewal-form').scrollIntoView({behavior:'smooth'})" class="brutalist-btn bg-primary text-black border-[3px] border-black px-8 py-4 font-black uppercase text-lg shadow-[6px_6px_0px_black] hover:bg-black hover:text-white">Pay Bill Now</button>
+                            <a href="tel:3475550199" class="brutalist-btn bg-white text-black border-[3px] border-black px-8 py-4 font-black uppercase text-lg hover:bg-gray-100 flex items-center gap-2">
+                                <span class="material-symbols-outlined">call</span> (347) 555-0199
                             </a>
                         </div>
                     </div>
                      <div class="flex-1 flex justify-center relative">
                         <!-- Placeholder illustration -->
                         <div class="w-full max-w-md aspect-square bg-gray-100 border-[3px] border-black shadow-[12px_12px_0px_black] flex items-center justify-center overflow-hidden relative">
-                             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1596742578443-7682e525c489?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center grayscale mix-blend-multiply opacity-50"></div>
-                             <span class="material-symbols-outlined text-9xl relative z-10 text-black">sim_card</span>
+                             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center grayscale mix-blend-multiply opacity-50"></div>
+                             <span class="material-symbols-outlined text-9xl relative z-10 text-black">payments</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Service Selector -->
-            <section id="service-selector" class="reveal-on-scroll border-b-[3px] border-black bg-gray-50 p-8 md:p-16">
+            <!-- Renewal Center (Quick Pay) -->
+            <section id="renewal-form" class="reveal-on-scroll border-b-[3px] border-black bg-white p-8 md:p-16">
                  <div class="text-center mb-12">
-                     <span class="bg-black text-white px-4 py-2 font-black uppercase text-sm mb-4 inline-block">Our Services</span>
-                     <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter">What Do You Need?</h2>
+                     <span class="bg-primary text-black border-[2px] border-black px-4 py-2 font-black uppercase text-sm mb-4 inline-block">Secure Payment</span>
+                     <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter">Quick Bill Pay</h2>
+                     <p class="text-xl font-bold uppercase text-gray-600 mt-4">Pay any carrier bill in seconds</p>
                  </div>
 
-                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                     <!-- Card 1: New Line -->
-                     <div class="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_0px_black] hover:translate-y-[-4px] transition-transform">
-                         <span class="material-symbols-outlined text-6xl mb-6 bg-primary border-[2px] border-black rounded-full p-4">add_call</span>
-                         <h3 class="text-2xl font-black uppercase mb-4">New Line Activation</h3>
-                         <p class="font-bold text-gray-600 mb-6 min-h-[3rem]">Activate prepaid or postpaid service on any carrier with no contracts.</p>
-                         <ul class="text-sm font-bold uppercase space-y-3 mb-8">
-                             <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Bring your own device (BYOD)</li>
-                             <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Purchase new device</li>
-                             <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Same-day activation</li>
-                             <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> All major carriers</li>
-                         </ul>
-                         <div class="border-t-2 border-black pt-4 mb-6">
-                             <span class="block text-xs uppercase font-bold text-gray-500">Starting At</span>
-                             <span class="text-3xl font-black">$29 <span class="text-sm font-bold text-gray-500">Fee</span></span>
+                 <div class="max-w-4xl mx-auto bg-gray-50 border-[4px] border-black p-6 md:p-12 shadow-[12px_12px_0px_black] relative">
+                     <!-- Carrier Grid -->
+                     <div class="mb-8">
+                         <label class="block font-black uppercase text-xl mb-6">1. Select Your Carrier</label>
+                         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                             <button class="carrier-btn p-4 border-[3px] border-black bg-white hover:bg-black hover:text-white transition-colors flex flex-col items-center justify-center gap-2 group selected">
+                                 <span class="material-symbols-outlined text-3xl">cell_tower</span>
+                                 <span class="font-bold uppercase text-xs">T-Mobile</span>
+                             </button>
+                             <button class="carrier-btn p-4 border-[3px] border-black bg-white hover:bg-black hover:text-white transition-colors flex flex-col items-center justify-center gap-2 group">
+                                 <span class="material-symbols-outlined text-3xl">network_cell</span>
+                                 <span class="font-bold uppercase text-xs">AT&T</span>
+                             </button>
+                             <button class="carrier-btn p-4 border-[3px] border-black bg-white hover:bg-black hover:text-white transition-colors flex flex-col items-center justify-center gap-2 group">
+                                 <span class="material-symbols-outlined text-3xl">wifi_tethering</span>
+                                 <span class="font-bold uppercase text-xs">Verizon</span>
+                             </button>
+                             <button class="carrier-btn p-4 border-[3px] border-black bg-white hover:bg-black hover:text-white transition-colors flex flex-col items-center justify-center gap-2 group">
+                                 <span class="material-symbols-outlined text-3xl">sim_card</span>
+                                 <span class="font-bold uppercase text-xs">Metro</span>
+                             </button>
+                             <button class="carrier-btn p-4 border-[3px] border-black bg-white hover:bg-black hover:text-white transition-colors flex flex-col items-center justify-center gap-2 group">
+                                 <span class="material-symbols-outlined text-3xl">add</span>
+                                 <span class="font-bold uppercase text-xs">Other</span>
+                             </button>
                          </div>
-                         <button class="w-full bg-primary text-black border-[3px] border-black py-4 font-black uppercase hover:bg-black hover:text-white">Activate New Line</button>
                      </div>
 
-                     <!-- Card 2: Bill Payment -->
-                     <div class="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_0px_black] hover:translate-y-[-4px] transition-transform">
-                        <span class="material-symbols-outlined text-6xl mb-6 bg-gray-200 border-[2px] border-black rounded-full p-4">payments</span>
-                        <h3 class="text-2xl font-black uppercase mb-4">Bill Payment & Renewal</h3>
-                        <p class="font-bold text-gray-600 mb-6 min-h-[3rem]">Pay your monthly bill or renew prepaid plans instantly in-store.</p>
-                        <ul class="text-sm font-bold uppercase space-y-3 mb-8">
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> All carriers accepted</li>
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Cash, card, or Apple Pay</li>
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Instant top-ups</li>
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Auto-pay setup help</li>
-                        </ul>
-                        <div class="border-t-2 border-black pt-4 mb-6">
-                            <span class="block text-xs uppercase font-bold text-gray-500">Service Fee</span>
-                            <span class="text-3xl font-black">FREE <span class="text-sm font-bold text-gray-500">Always</span></span>
+                     <!-- Phone Input -->
+                     <div class="mb-8">
+                        <label class="block font-black uppercase text-xl mb-6">2. Enter Phone Number</label>
+                        <div class="relative">
+                            <input type="tel" placeholder="(555) 555-5555" class="w-full border-[3px] border-black p-4 text-2xl font-black bg-white focus:ring-0 placeholder:text-gray-300">
+                             <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 text-green-600 font-bold uppercase text-xs hidden" id="verified-badge">
+                                 <span class="material-symbols-outlined text-lg">check_circle</span> Verified
+                             </div>
                         </div>
-                        <button class="w-full bg-primary text-black border-[3px] border-black py-4 font-black uppercase hover:bg-black hover:text-white">Renew My Plan</button>
-                    </div>
+                     </div>
 
-                    <!-- Card 3: Switch -->
-                    <div class="bg-white border-[3px] border-black p-8 shadow-[8px_8px_0px_0px_black] hover:translate-y-[-4px] transition-transform">
-                        <span class="material-symbols-outlined text-6xl mb-6 bg-black text-white border-[2px] border-black rounded-full p-4">swap_horiz</span>
-                        <h3 class="text-2xl font-black uppercase mb-4">Switch Carriers</h3>
-                        <p class="font-bold text-gray-600 mb-6 min-h-[3rem]">Keep your number, switch to better plans, and save money.</p>
-                        <ul class="text-sm font-bold uppercase space-y-3 mb-8">
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Keep your number</li>
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Compare plan options</li>
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> No contract traps</li>
-                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-600">check_circle</span> Transfer contacts & data</li>
-                        </ul>
-                        <div class="border-t-2 border-black pt-4 mb-6">
-                            <span class="block text-xs uppercase font-bold text-gray-500">Consultation</span>
-                            <span class="text-3xl font-black">FREE <span class="text-sm font-bold text-gray-500">+ Plan Cost</span></span>
+                     <!-- Amount -->
+                     <div class="mb-12">
+                        <label class="block font-black uppercase text-xl mb-6">3. Payment Amount</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-black text-2xl">$</span>
+                                <input type="number" placeholder="0.00" class="w-full border-[3px] border-black p-4 pl-10 text-2xl font-black bg-white focus:ring-0">
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <button class="flex-1 py-3 border-[2px] border-black bg-white font-bold uppercase hover:bg-primary">Fetch Bill</button>
+                                <span class="font-bold uppercase text-gray-400 text-xs">Login Required</span>
+                            </div>
                         </div>
-                        <button class="w-full bg-primary text-black border-[3px] border-black py-4 font-black uppercase hover:bg-black hover:text-white">Switch My Carrier</button>
-                    </div>
+                     </div>
+
+                     <!-- Action -->
+                     <button class="w-full bg-black text-white border-[3px] border-black py-6 text-2xl font-black uppercase hover:bg-primary hover:text-black shadow-[8px_8px_0px_0px_#ffd400] transition-transform active:translate-y-1 active:shadow-none">
+                         Proceed to Payment
+                     </button>
+                     
+                     <p class="mt-6 text-center text-xs font-bold uppercase text-gray-500 flex items-center justify-center gap-2">
+                         <span class="material-symbols-outlined text-sm">lock</span> Secure 256-bit Encryption
+                     </p>
                  </div>
             </section>
 
@@ -633,20 +642,23 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
-        // PLAN SELECTOR LOGIC
-        function selectPlanOption(btn, type) {
-            // Remove active class from siblings
-            btn.parentNode.querySelectorAll('button').forEach(b => {
-                b.classList.remove('bg-black', 'text-white');
-                b.classList.add('hover:bg-gray-100');
+        // CARRIER SELECTOR LOGIC
+        const carrierBtns = document.querySelectorAll('.carrier-btn');
+        carrierBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove selected state from all
+                carrierBtns.forEach(b => {
+                    b.classList.remove('bg-black', 'text-white', 'selected');
+                    b.classList.add('bg-white', 'hover:bg-black', 'hover:text-white');
+                    b.querySelector('.material-symbols-outlined').classList.remove('text-primary');
+                });
+                
+                // Add selected state to clicked
+                btn.classList.remove('bg-white', 'hover:bg-black', 'hover:text-white');
+                btn.classList.add('bg-black', 'text-white', 'selected');
+                btn.querySelector('.material-symbols-outlined').classList.add('text-primary');
             });
-            // Add active class to clicked
-            btn.classList.remove('hover:bg-gray-100');
-            btn.classList.add('bg-black', 'text-white');
-            
-            // Mock update functionality (in prod: filter table)
-            console.log(`Selected ${type}: ${btn.innerText}`);
-        }
+        });
     </script>
      <script type="module" src="js/chatbot.js"></script>
 </body>
