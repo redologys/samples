@@ -13,6 +13,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link rel="stylesheet" href="css/chatbot.css">
+    <link rel="stylesheet" href="css/footer.css">
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -694,9 +695,122 @@
             </div>
 
             <!-- Footer -->
-            <div class="mx-auto w-full max-w-[1400px] text-right p-4 bg-white">
-                <p class="text-xs font-bold uppercase tracking-widest text-black/40">© 2026 MOBILE EXPERTS INC. V2.0 // BRUTALIST EDITION</p>
-            </div>
+            <footer class="site-footer font-display">
+                <!-- Main Footer Content -->
+                <div class="footer-main">
+                  <div class="footer-container">
+                    
+                    <!-- Column 1: Branding -->
+                    <div class="footer-column">
+                      <div class="footer-logo">
+                        <span class="logo-icon">⚡</span>
+                        <span class="logo-text">MOBILE EXPERTS</span>
+                      </div>
+                      <p class="footer-tagline">Brooklyn's trusted mobile experts since 2019</p>
+                      <div class="social-links">
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                      </div>
+                    </div>
+                    
+                    <!-- Column 2: Services -->
+                    <div class="footer-column">
+                      <h4>Services</h4>
+                      <ul>
+                        <li><a href="repairs.html">Device Repairs</a></li>
+                        <li><a href="inventory.html">Buy Devices</a></li>
+                        <li><a href="sell.html">Sell/Trade-In</a></li>
+                        <li><a href="phone-services.html">Phone Line Services</a></li>
+                        <li><a href="device-protection.html">Protection Plans</a></li>
+                        <li><a href="#">Warranty Info</a></li>
+                      </ul>
+                    </div>
+                    
+                    <!-- Column 3: Company & Support -->
+                    <div class="footer-column">
+                      <h4>Company</h4>
+                      <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Customer Reviews</a></li>
+                        <li><a href="#">Blog</a></li>
+                      </ul>
+                      <h4 class="mt-4">Support</h4>
+                      <ul>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Track Repair</a></li>
+                        <li><a href="booking.html">Book Appointment</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                      </ul>
+                    </div>
+                    
+                    <!-- Column 4: Contact -->
+                    <div class="footer-column">
+                      <h4>Contact</h4>
+                      <div class="contact-info">
+                        <p class="contact-item mb-2 text-sm text-gray-600">
+                          <strong>📍 Location</strong><br>
+                          123 Bedford Avenue<br>
+                          Brooklyn, NY 11211
+                        </p>
+                        <p class="contact-item mb-2 text-sm text-gray-600">
+                          <strong>📞 Phone</strong><br>
+                          <a href="tel:347-555-0199">(347) 555-0199</a>
+                        </p>
+                        <p class="contact-item mb-2 text-sm text-gray-600">
+                          <strong>✉️ Email</strong><br>
+                          <a href="mailto:info@mobileexperts.com">info@mobileexperts.com</a>
+                        </p>
+                        <p class="contact-item mb-2 text-sm text-gray-600">
+                          <strong>🕒 Hours</strong><br>
+                          Mon-Sat: 9AM - 7PM<br>
+                          Sun: 10AM - 6PM
+                        </p>
+                        <a href="https://maps.google.com" class="btn-directions">Get Directions</a>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+                
+                <!-- Trust Badges Bar -->
+                <div class="footer-trust">
+                  <div class="trust-badges">
+                    <div class="trust-badge">
+                      <div class="badge-icon">⭐⭐⭐⭐⭐</div>
+                      <div class="badge-text">500+ Reviews<br>on Google</div>
+                    </div>
+                    <div class="trust-badge">
+                      <div class="badge-icon">🔒</div>
+                      <div class="badge-text">Secure Data<br>Protection</div>
+                    </div>
+                    <div class="trust-badge">
+                      <div class="badge-icon">✓</div>
+                      <div class="badge-text">Licensed<br>Technicians</div>
+                    </div>
+                    <div class="trust-badge">
+                      <div class="badge-icon">🏆</div>
+                      <div class="badge-text">5 Years<br>in Business</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Copyright Bar -->
+                <div class="footer-bottom">
+                  <div class="footer-container">
+                    <div class="copyright">
+                      <p>© 2026 Mobile Experts Inc. All rights reserved.</p>
+                      <div class="legal-links">
+                        <a href="#">Privacy Policy</a>
+                        <span>•</span>
+                        <a href="#">Terms of Service</a>
+                        <span>•</span>
+                        <a href="#">Sitemap</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </footer>
         </div>
     </div>
 
@@ -1033,8 +1147,6 @@
       `;
     }
     </script>
-    <script src="js/chatbot.js"></script>
-</body>
-
+    <script type="module" src="js/chatbot.js"></script>
 </body>
 </html>
