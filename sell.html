@@ -188,17 +188,12 @@
             <!-- Enhanced Device Value Calculator -->
             <section id="enhanced-calculator" class="reveal-on-scroll p-4 md:p-12 border-b-[3px] border-black bg-gray-50">
                 <div class="max-w-4xl mx-auto border-[4px] border-black bg-white shadow-[16px_16px_0px_0px_black] overflow-hidden">
-                    <div class="bg-black p-6 text-white text-center">
-                        <h2 class="text-3xl font-black uppercase tracking-tighter">AI Value Calculator v2.0</h2>
-                        <p class="font-bold uppercase text-primary tracking-widest text-sm">Instant quotes • Price History • AI analysis</p>
+                    <div class="bg-primary p-6 text-black text-center border-b-[3px] border-black">
+                        <h2 class="text-3xl font-black uppercase tracking-tighter">GET YOUR INSTANT QUOTE</h2>
+                        <p class="font-bold uppercase tracking-widest text-sm">Select your device for an accurate trade-in value</p>
                     </div>
                     
-                    <!-- Quote Methods Tabs -->
-                    <div class="flex border-b-[3px] border-black">
-                        <button onclick="switchTab('quick')" id="tab-quick" class="calc-tab flex-1 p-4 font-black uppercase text-sm md:text-base bg-primary border-r-[3px] border-black hover:bg-black hover:text-white transition-none active">📝 Quick Quote</button>
-                        <button onclick="switchTab('ai')" id="tab-ai" class="calc-tab flex-1 p-4 font-black uppercase text-sm md:text-base border-r-[3px] border-black hover:bg-black hover:text-white transition-none">📸 AI Photo Quote</button>
-                        <button onclick="switchTab('detailed')" id="tab-detailed" class="calc-tab flex-1 p-4 font-black uppercase text-sm md:text-base hover:bg-black hover:text-white transition-none">🔍 Detailed</button>
-                    </div>
+                    
 
                     <!-- Quick Quote Tab Content -->
                     <div id="quick-tab" class="tab-pane p-6 md:p-10 active">
@@ -355,41 +350,7 @@
                         </form>
                     </div>
 
-                    <!-- AI Photo Quote Tab Content -->
-                    <div id="ai-tab" class="tab-pane p-6 md:p-10 hidden">
-                        <div class="text-center mb-8">
-                            <h3 class="text-2xl font-black uppercase mb-2">AI Condition Analysis</h3>
-                            <p class="font-bold uppercase text-xs opacity-60">Upload photos for an instant robotic inspection</p>
-                        </div>
-                        <div id="uploadZone" class="border-[4px] border-dashed border-black p-12 text-center bg-gray-50 hover:bg-primary/10 cursor-pointer mb-8 animate-pulse" onclick="document.getElementById('photoInput').click()">
-                            <input type="file" id="photoInput" class="hidden" multiple onchange="handleFiles(this.files)">
-                            <span class="material-symbols-outlined text-6xl mb-4">add_a_photo</span>
-                            <h4 class="font-black uppercase">Drag or Click to Upload</h4>
-                            <p class="text-[10px] font-bold uppercase opacity-50">Upload Front, Back, and Sides for 99% accuracy</p>
-                        </div>
-                        <div id="photoPreviewGrid" class="grid grid-cols-4 gap-4 mb-8"></div>
-                        <button id="analyzeBtn" onclick="analyzePhotos()" disabled class="w-full bg-black text-white p-6 font-black uppercase border-[3px] border-black shadow-[6px_6px_0px_black] disabled:opacity-50 disabled:cursor-not-allowed">
-                            <span id="analyzeText">🤖 RUN AI ANALYSIS</span>
-                        </button>
-                        
-                        <!-- AI Result Display -->
-                        <div id="aiResults" class="hidden border-[4px] border-black p-6 mt-8 bg-black text-white">
-                            <div class="flex justify-between items-center mb-6 border-b border-white/20 pb-4">
-                                <h4 class="font-black uppercase text-xl text-primary">Analysis Complete</h4>
-                                <span class="bg-green-600 px-2 py-1 text-[10px] font-black">95% CONFIDENT</span>
-                            </div>
-                            <div class="space-y-4 mb-8">
-                                <div class="flex justify-between font-bold uppercase text-sm"><span>Screen</span><span class="text-primary">Perfect Condition</span></div>
-                                <div class="flex justify-between font-bold uppercase text-sm"><span>Body</span><span class="text-yellow-400">Minor Scratches</span></div>
-                                <div class="flex justify-between font-bold uppercase text-sm"><span>Logic</span><span class="text-primary">Verified Clean</span></div>
-                            </div>
-                            <div class="bg-white text-black p-6 text-center">
-                                <div class="text-xs font-black uppercase mb-1">AI Verified Value</div>
-                                <div id="aiPriceValue" class="text-6xl font-black tracking-tighter text-stroke-sm">$425</div>
-                                <button class="mt-4 w-full bg-black text-white p-3 font-black uppercase text-sm">Accept AI Quote</button>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </section>
 

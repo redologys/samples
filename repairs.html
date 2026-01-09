@@ -140,6 +140,11 @@
         h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.1; }
         p { line-height: 1.6; }
         button, a { min-height: 44px; }
+
+        /* ICON ANIMATIONS */
+        .icon-animate { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .calc-device-card:hover .icon-animate { transform: scale(1.1) rotate(3deg); }
+        .calc-device-card.bg-primary .icon-animate { transform: scale(1.15); }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-black antialiased selection:bg-black selection:text-primary relative overflow-x-hidden">
@@ -357,21 +362,30 @@
                     <!-- Step 1: Device Selection -->
                     <div id="calc-step-1" class="calc-step">
                         <h3 class="text-2xl font-black uppercase mb-6">Choose Your Device</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="calc-device-card border-[3px] border-black p-6 text-center cursor-pointer hover:bg-primary hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_black]" onclick="calcSelectDevice('iPhone')">
-                                <div class="text-5xl mb-3">📱</div>
-                                <div class="text-xl font-black uppercase">iPhone</div>
-                                <div class="text-sm text-black/60">All models</div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="calc-device-card border-[3px] border-black p-8 text-center cursor-pointer hover:bg-primary hover:-translate-y-2 hover:shadow-[10px_10px_0px_0px_black] transition-all duration-200" onclick="calcSelectDevice('iPhone')">
+                                <!-- Apple Logo SVG -->
+                                <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                                    <svg class="w-16 h-16 icon-animate" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+                                </div>
+                                <div class="text-2xl font-black uppercase">iPhone</div>
+                                <div class="text-sm font-bold text-black/60 mt-1">All models</div>
                             </div>
-                            <div class="calc-device-card border-[3px] border-black p-6 text-center cursor-pointer hover:bg-primary hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_black]" onclick="calcSelectDevice('Samsung')">
-                                <div class="text-5xl mb-3">📱</div>
-                                <div class="text-xl font-black uppercase">Samsung</div>
-                                <div class="text-sm text-black/60">Galaxy series</div>
+                            <div class="calc-device-card border-[3px] border-black p-8 text-center cursor-pointer hover:bg-primary hover:-translate-y-2 hover:shadow-[10px_10px_0px_0px_black] transition-all duration-200" onclick="calcSelectDevice('Samsung')">
+                                <!-- Samsung Logo SVG -->
+                                <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                                    <svg class="w-16 h-10 icon-animate" viewBox="0 0 512 73" fill="currentColor"><path d="M85.7 1.6c-17.8 0-30.3 7.2-30.3 22.4 0 29.4 44.9 16.2 44.9 32.3 0 5.5-6.5 9.6-17.5 9.6-12.6 0-22.9-5-26.7-7.9v14.9c7.8 4.1 17.8 6.3 27.5 6.3 20.7 0 33.2-9.5 33.2-23.7 0-30.2-44.9-17.1-44.9-32.6 0-5.2 5.6-8.4 14.7-8.4 10.2 0 18.9 3.4 24.2 7v-14c-5.9-3.5-15.3-5.9-25.1-5.9zM283 3.3l-26.4 72.1h16.2l5.1-15.3h28.5l5.1 15.3h16.9L302 3.3h-19zm9.5 16.7l10.3 29.2h-20.5l10.2-29.2zM179.8 3.3v72.1h13.4V47.1l27.3 28.3h19.9l-32.9-32.7 29.9-39.4h-18.7l-25.5 35.4V3.3h-13.4zM0 3.6v72h13.4v-27h12.7l18.7 27h17.1l-21.4-29c10.2-4 16.6-12.8 16.6-22.6 0-14.1-11.9-20.4-28.6-20.4H0zm13.4 11.9h14.2c9.8 0 14.9 3.9 14.9 10.7 0 5.9-5.1 10.5-14.9 10.5H13.4V15.5zM381.5 3.3v72.1h47.2V63.2h-33.8V3.3h-13.4zM512 3.3h-50.5v72.1H512V63.2h-37V43.1h33.4V31.6H475V15.5h37V3.3zM134.7 3.3l-21.2 53.9-21.1-53.9H77.3l30.9 72.1h11.4l31-72.1h-15.9z"/></svg>
+                                </div>
+                                <div class="text-2xl font-black uppercase">Samsung</div>
+                                <div class="text-sm font-bold text-black/60 mt-1">Galaxy series</div>
                             </div>
-                            <div class="calc-device-card border-[3px] border-black p-6 text-center cursor-pointer hover:bg-primary hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_black]" onclick="calcSelectDevice('GooglePixel')">
-                                <div class="text-5xl mb-3">📱</div>
-                                <div class="text-xl font-black uppercase">Google Pixel</div>
-                                <div class="text-sm text-black/60">All Pixels</div>
+                            <div class="calc-device-card border-[3px] border-black p-8 text-center cursor-pointer hover:bg-primary hover:-translate-y-2 hover:shadow-[10px_10px_0px_0px_black] transition-all duration-200" onclick="calcSelectDevice('GooglePixel')">
+                                <!-- Google G Logo SVG -->
+                                <div class="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                                    <svg class="w-14 h-14 icon-animate" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                </div>
+                                <div class="text-2xl font-black uppercase">Google Pixel</div>
+                                <div class="text-sm font-bold text-black/60 mt-1">All Pixels</div>
                             </div>
                         </div>
                     </div>
@@ -780,8 +794,12 @@
             <!-- Footer -->
             <div class="mx-auto w-full max-w-[1400px] flex flex-col md:flex-row justify-between items-center p-6 bg-black text-white">
                 <div class="flex gap-4">
-                     <a href="#" class="hover:text-primary"><span class="material-symbols-outlined">public</span></a>
-                     <a href="#" class="hover:text-primary"><span class="material-symbols-outlined">photo_camera</span></a>
+                     <a href="#" class="w-10 h-10 border-2 border-white/30 hover:border-primary hover:bg-primary/20 flex items-center justify-center transition-all hover:scale-110" aria-label="Website">
+                         <span class="material-symbols-outlined text-white/60 hover:text-primary">public</span>
+                     </a>
+                     <a href="#" class="w-10 h-10 border-2 border-white/30 hover:border-primary hover:bg-primary/20 flex items-center justify-center transition-all hover:scale-110" aria-label="Instagram">
+                         <span class="material-symbols-outlined text-white/60 hover:text-primary">photo_camera</span>
+                     </a>
                 </div>
                 <div class="flex gap-6 text-xs font-bold uppercase tracking-widest text-white/40 mt-4 md:mt-0">
                     <a href="#" class="hover:text-primary">Privacy Policy</a>
@@ -948,43 +966,78 @@
     function closeExitModal() { document.getElementById('exitModal').style.display = 'none'; }
     function submitExitEmail(e) { e.preventDefault(); alert('Success! Discount sent to email.'); closeExitModal(); }
 
-    // CHATBOT
+    // CHATBOT WITH SMART FALLBACKS
     let chatHistory = [];
-    const GROQ_KEY = ""; // Placeholder - Add your API key here
     function openChat() { document.getElementById('chatWindow').style.display = 'flex'; document.getElementById('chatBubble').style.display = 'none'; }
     function closeChat() { document.getElementById('chatWindow').style.display = 'none'; document.getElementById('chatBubble').style.display = 'flex'; }
     function minimizeChat() { closeChat(); }
     function selectQuick(action) {
-      const msgs = { 'repair': 'I need a repair quote', 'sell': 'Price for my device?', 'location': 'Where are you?' };
-      document.getElementById('chatInput').value = msgs[action]; sendChatMessage();
+      const msgs = { 'repair': 'I need a repair quote', 'sell': 'What can I sell my phone for?', 'location': 'Where are you located?' };
+      document.getElementById('chatInput').value = msgs[action]; 
+      sendChatMessage();
     }
-    async function sendChatMessage() {
+
+    // Smart fallback responses that work without API
+    const chatFallbacks = {
+      repair: {
+        keywords: ['repair', 'fix', 'broken', 'screen', 'battery', 'crack', 'damage', 'quote'],
+        response: "📱 For repair quotes, use our instant calculator above! We fix iPhones, Samsung, and Pixels. Screen repairs start at $49, batteries from $59. Most repairs done in under 1 hour with 90-day warranty!"
+      },
+      sell: {
+        keywords: ['sell', 'trade', 'buy', 'worth', 'value', 'price', 'cash'],
+        response: "💰 We buy phones, tablets, and laptops! iPhone 14 Pro Max: up to $700. Samsung S23 Ultra: up to $550. Visit our Sell page for instant quotes. Same-day payment guaranteed!"
+      },
+      location: {
+        keywords: ['where', 'location', 'address', 'find', 'brooklyn', 'near', 'directions'],
+        response: "📍 We're at 123 Bedford Avenue, Brooklyn, NY 11211. Open Mon-Sun 10am-8pm. Call (929) 789-2786 to confirm wait times. Walk-ins welcome!"
+      },
+      hours: {
+        keywords: ['hours', 'open', 'close', 'time', 'when', 'schedule'],
+        response: "🕐 We're open 7 days a week! Mon-Sun: 10am - 8pm. No appointment needed for most repairs. Call ahead at (929) 789-2786 for complex repairs."
+      },
+      warranty: {
+        keywords: ['warranty', 'guarantee', 'parts', 'quality'],
+        response: "✅ All repairs include a 90-day warranty! We use premium quality parts. If anything goes wrong, bring it back - we'll fix it free."
+      },
+      contact: {
+        keywords: ['call', 'phone', 'contact', 'number', 'reach'],
+        response: "📞 Call us at (929) 789-2786 or visit our Contact page to send a message. We typically respond within 1 hour during business hours!"
+      }
+    };
+
+    function getSmartResponse(text) {
+      const lower = text.toLowerCase();
+      for (const [key, data] of Object.entries(chatFallbacks)) {
+        if (data.keywords.some(kw => lower.includes(kw))) {
+          return data.response;
+        }
+      }
+      return "👋 Thanks for reaching out! For the fastest help:\n• Use the calculator above for repair quotes\n• Visit our Sell page to trade in devices\n• Call (929) 789-2786 for immediate assistance\n\nHow else can I help?";
+    }
+
+    function sendChatMessage() {
       const input = document.getElementById('chatInput');
       const text = input.value.trim();
       if (!text) return;
       addMsg(text, 'user');
       input.value = '';
       document.getElementById('typingIndicator').style.display = 'block';
-      try {
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${GROQ_API_KEY}` },
-          body: JSON.stringify({
-            messages: [{ role: "system", content: "You are TechBot at Mobile Experts. Be direct, brutalist, and helpful." }, { role: "user", content: text }],
-            model: "llama3-8b-8192"
-          })
-        });
-        const data = await response.json();
-        addMsg(data.choices[0].message.content, 'bot');
-      } catch (e) { addMsg("Neural link failed. Call (347) 555-0199.", 'bot'); }
-      document.getElementById('typingIndicator').style.display = 'none';
+      
+      // Simulate thinking delay for natural feel
+      setTimeout(() => {
+        const response = getSmartResponse(text);
+        addMsg(response, 'bot');
+        document.getElementById('typingIndicator').style.display = 'none';
+      }, 800 + Math.random() * 500);
     }
+
     function addMsg(text, sender) {
       const area = document.getElementById('chatMessagesArea');
       const msg = document.createElement('div');
       msg.className = `chat-message ${sender}-message`;
-      msg.innerHTML = `<div class="msg-bubble"><p>${text}</p></div>`;
-      area.appendChild(msg); area.scrollTop = area.scrollHeight;
+      msg.innerHTML = `<div class="msg-bubble"><p style="white-space: pre-line;">${text}</p></div>`;
+      area.appendChild(msg); 
+      area.scrollTop = area.scrollHeight;
     }
     function chatKeyPress(e) { if (e.key === 'Enter') sendChatMessage(); }
 
