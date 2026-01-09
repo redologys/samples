@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="css/chatbot.css">
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -35,7 +36,7 @@
                         'marquee': 'marquee 30s linear infinite',
                         'glitch': 'glitch 0.2s steps(4)',
                         'hard-slide': 'hard-slide 0.15s linear forwards',
-                        'shake': 'shake 0.2s linear 3',
+                        // 'shake' removed
                         'blink': 'blink-border 0.6s steps(4) infinite',
                         'loading': 'loading-steps 1s steps(3) infinite',
                     },
@@ -54,11 +55,7 @@
                             'from': { transform: 'translateY(20px)', opacity: '0' },
                             'to': { transform: 'translateY(0)', opacity: '1' },
                         },
-                        shake: {
-                            '0%, 100%': { transform: 'translateX(0)' },
-                            '25%': { transform: 'translateX(-4px)' },
-                            '75%': { transform: 'translateX(4px)' },
-                        },
+                        // shake keyframes removed
                         'blink-border': {
                             '0%, 50%, 100%': { borderColor: 'black' },
                             '25%, 75%': { borderColor: '#ffd400' },
@@ -145,6 +142,39 @@
         .icon-animate { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .calc-device-card:hover .icon-animate { transform: scale(1.1) rotate(3deg); }
         .calc-device-card.bg-primary .icon-animate { transform: scale(1.15); }
+
+        /* ========================================
+           FEATURE CARD ANIMATIONS (Subtle Lift & Glow)
+           ======================================== */
+        .feature-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
+                        box-shadow 0.3s ease-out;
+            will-change: transform;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Icon Behaviors */
+        .feature-icon {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-block;
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+        
+        /* Specific Micro-interactions */
+        .feature-card:hover .icon-clock { transform: scale(1.1) rotate(10deg); }
+        .feature-card:hover .icon-dollar { transform: scale(1.1) scale(1.05); animation: pulse-soft 1s infinite alternate; }
+        .feature-card:hover .icon-tools { transform: scale(1.1) rotate(15deg); }
+        .feature-card:hover .icon-shield { transform: scale(1.1); filter: drop-shadow(0 0 8px rgba(255, 212, 0, 0.5)); }
+
+        @keyframes pulse-soft {
+            from { transform: scale(1.05); }
+            to { transform: scale(1.15); }
+        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-black antialiased selection:bg-black selection:text-primary relative overflow-x-hidden">
@@ -261,7 +291,7 @@
                     <!-- Card 1 -->
                     <div class="group relative flex flex-col border-[3px] border-black bg-white p-8 hover:bg-primary transition-none shadow-[4px_4px_0px_0px_black] hover:shadow-[8px_8px_0px_0px_black] hover:-translate-y-1">
                         <div class="absolute top-4 right-4 bg-primary border-[2px] border-black px-2 py-1 text-xs font-bold uppercase group-hover:bg-white">Most Popular</div>
-                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:animate-shake">smartphone</span>
+                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:feature-icon icon-tools">smartphone</span>
                         <h3 class="text-3xl font-black uppercase mb-2">iPhone<br>Repairs</h3>
                         <p class="text-lg font-bold mb-8">Starting at $49</p>
                         <a href="#" class="mt-auto font-bold uppercase flex items-center gap-2 group-hover:underline">
@@ -271,7 +301,7 @@
                     
                     <!-- Card 2 -->
                     <div class="group flex flex-col border-[3px] border-black bg-white p-8 hover:bg-primary transition-none shadow-[4px_4px_0px_0px_black] hover:shadow-[8px_8px_0px_0px_black] hover:-translate-y-1">
-                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:animate-shake">android</span>
+                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:feature-icon icon-tools">android</span>
                         <h3 class="text-3xl font-black uppercase mb-2">Samsung<br>Repairs</h3>
                         <p class="text-lg font-bold mb-8">Starting at $59</p>
                         <a href="#" class="mt-auto font-bold uppercase flex items-center gap-2 group-hover:underline">
@@ -281,7 +311,7 @@
 
                     <!-- Card 3 -->
                     <div class="group flex flex-col border-[3px] border-black bg-white p-8 hover:bg-primary transition-none shadow-[4px_4px_0px_0px_black] hover:shadow-[8px_8px_0px_0px_black] hover:-translate-y-1">
-                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:animate-shake">smartphone</span> 
+                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:feature-icon icon-tools">smartphone</span> 
                         <!-- Google Pixel Icon approx as smartphone -->
                         <h3 class="text-3xl font-black uppercase mb-2">Google Pixel<br>Repairs</h3>
                         <p class="text-lg font-bold mb-8">Starting at $55</p>
@@ -292,7 +322,7 @@
 
                     <!-- Card 4 -->
                     <div class="group flex flex-col border-[3px] border-black bg-white p-8 hover:bg-primary transition-none shadow-[4px_4px_0px_0px_black] hover:shadow-[8px_8px_0px_0px_black] hover:-translate-y-1">
-                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:animate-shake">laptop_mac</span>
+                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:feature-icon icon-tools">laptop_mac</span>
                         <h3 class="text-3xl font-black uppercase mb-2">MacBook<br>Repairs</h3>
                         <p class="text-sm font-bold uppercase mb-1 opacity-70">Logic Boards • Screens</p>
                         <p class="text-lg font-bold mb-8">Starting at $99</p>
@@ -303,7 +333,7 @@
 
                     <!-- Card 5 -->
                     <div class="group flex flex-col border-[3px] border-black bg-white p-8 hover:bg-primary transition-none shadow-[4px_4px_0px_0px_black] hover:shadow-[8px_8px_0px_0px_black] hover:-translate-y-1">
-                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:animate-shake">tablet_mac</span>
+                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:feature-icon icon-tools">tablet_mac</span>
                         <h3 class="text-3xl font-black uppercase mb-2">iPad / Tablet<br>Repairs</h3>
                         <p class="text-lg font-bold mb-8">Starting at $79</p>
                         <a href="#" class="mt-auto font-bold uppercase flex items-center gap-2 group-hover:underline">
@@ -313,7 +343,7 @@
 
                     <!-- Card 6 -->
                     <div class="group flex flex-col border-[3px] border-black bg-white p-8 hover:bg-primary transition-none shadow-[4px_4px_0px_0px_black] hover:shadow-[8px_8px_0px_0px_black] hover:-translate-y-1">
-                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:animate-shake">videogame_asset</span>
+                        <span class="material-symbols-outlined text-6xl mb-4 group-hover:feature-icon icon-tools">videogame_asset</span>
                         <h3 class="text-3xl font-black uppercase mb-2">Game<br>Consoles</h3>
                         <p class="text-sm font-bold uppercase mb-1 opacity-70">PS5 • Xbox • Switch</p>
                         <p class="text-lg font-bold mb-8">Starting at $69</p>
@@ -784,7 +814,7 @@
                          style='background-image: url("https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyb8hzZLE9eVAR2LtjS8kT5gCxZ9_H9aFfqqXnebd3PiM6p1xmWtVV1b5aI_0Wjy9lZWb6T99oxDc_jPaenANw0hIYgyMWwr1ps2XqvRCGa8QCELT3vud2Hf314ORHgzBlHC2wji36keFqz=s1600");'>
                     </div>
                     <div class="absolute inset-0 flex items-center justify-center bg-primary/20 p-4">
-                         <a href="#" class="brutalist-btn border-[3px] border-black bg-white px-6 py-3 text-sm font-bold uppercase text-black shadow-[4px_4px_0px_0px_#000000] hover:animate-shake hover:bg-primary">
+                         <a href="#" class="brutalist-btn border-[3px] border-black bg-white px-6 py-3 text-sm font-bold uppercase text-black shadow-[4px_4px_0px_0px_#000000] hover:bg-primary feature-card">
                             Get Directions
                         </a>
                     </div>
@@ -836,13 +866,7 @@
       </div>
     </div>
 
-    <!-- CHATBOT WIDGET -->
-    <div id="chatWidget" class="chat-widget">
-      <!-- Chat Button (Collapsed) -->
-      <button class="chat-bubble" id="chatBubble" onclick="openChat()">
-        <span class="chat-icon">💬</span>
-        <span class="chat-badge" id="chatBadge">1</span>
-      </button>
+
       
       <!-- Chat Window (Expanded) -->
       <div class="chat-window" id="chatWindow">
@@ -967,79 +991,8 @@
     function submitExitEmail(e) { e.preventDefault(); alert('Success! Discount sent to email.'); closeExitModal(); }
 
     // CHATBOT WITH SMART FALLBACKS
-    let chatHistory = [];
-    function openChat() { document.getElementById('chatWindow').style.display = 'flex'; document.getElementById('chatBubble').style.display = 'none'; }
-    function closeChat() { document.getElementById('chatWindow').style.display = 'none'; document.getElementById('chatBubble').style.display = 'flex'; }
-    function minimizeChat() { closeChat(); }
-    function selectQuick(action) {
-      const msgs = { 'repair': 'I need a repair quote', 'sell': 'What can I sell my phone for?', 'location': 'Where are you located?' };
-      document.getElementById('chatInput').value = msgs[action]; 
-      sendChatMessage();
-    }
 
-    // Smart fallback responses that work without API
-    const chatFallbacks = {
-      repair: {
-        keywords: ['repair', 'fix', 'broken', 'screen', 'battery', 'crack', 'damage', 'quote'],
-        response: "📱 For repair quotes, use our instant calculator above! We fix iPhones, Samsung, and Pixels. Screen repairs start at $49, batteries from $59. Most repairs done in under 1 hour with 90-day warranty!"
-      },
-      sell: {
-        keywords: ['sell', 'trade', 'buy', 'worth', 'value', 'price', 'cash'],
-        response: "💰 We buy phones, tablets, and laptops! iPhone 14 Pro Max: up to $700. Samsung S23 Ultra: up to $550. Visit our Sell page for instant quotes. Same-day payment guaranteed!"
-      },
-      location: {
-        keywords: ['where', 'location', 'address', 'find', 'brooklyn', 'near', 'directions'],
-        response: "📍 We're at 1134 Liberty Ave, Brooklyn, NY 11208. Open Mon-Sun 10am-8pm. Call (929) 789-2786 to confirm wait times. Walk-ins welcome!"
-      },
-      hours: {
-        keywords: ['hours', 'open', 'close', 'time', 'when', 'schedule'],
-        response: "🕐 We're open 7 days a week! Mon-Sun: 10am - 8pm. No appointment needed for most repairs. Call ahead at (929) 789-2786 for complex repairs."
-      },
-      warranty: {
-        keywords: ['warranty', 'guarantee', 'parts', 'quality'],
-        response: "✅ All repairs include a 90-day warranty! We use premium quality parts. If anything goes wrong, bring it back - we'll fix it free."
-      },
-      contact: {
-        keywords: ['call', 'phone', 'contact', 'number', 'reach'],
-        response: "📞 Call us at (929) 789-2786 or visit our Contact page to send a message. We typically respond within 1 hour during business hours!"
-      }
-    };
 
-    function getSmartResponse(text) {
-      const lower = text.toLowerCase();
-      for (const [key, data] of Object.entries(chatFallbacks)) {
-        if (data.keywords.some(kw => lower.includes(kw))) {
-          return data.response;
-        }
-      }
-      return "👋 Thanks for reaching out! For the fastest help:\n• Use the calculator above for repair quotes\n• Visit our Sell page to trade in devices\n• Call (929) 789-2786 for immediate assistance\n\nHow else can I help?";
-    }
-
-    function sendChatMessage() {
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-      addMsg(text, 'user');
-      input.value = '';
-      document.getElementById('typingIndicator').style.display = 'block';
-      
-      // Simulate thinking delay for natural feel
-      setTimeout(() => {
-        const response = getSmartResponse(text);
-        addMsg(response, 'bot');
-        document.getElementById('typingIndicator').style.display = 'none';
-      }, 800 + Math.random() * 500);
-    }
-
-    function addMsg(text, sender) {
-      const area = document.getElementById('chatMessagesArea');
-      const msg = document.createElement('div');
-      msg.className = `chat-message ${sender}-message`;
-      msg.innerHTML = `<div class="msg-bubble"><p style="white-space: pre-line;">${text}</p></div>`;
-      area.appendChild(msg); 
-      area.scrollTop = area.scrollHeight;
-    }
-    function chatKeyPress(e) { if (e.key === 'Enter') sendChatMessage(); }
 
     // ========================================
     // REPAIR CALCULATOR
@@ -1243,5 +1196,6 @@
         }
     }
     </script>
+    <script src="js/chatbot.js"></script>
 </body>
 </html>

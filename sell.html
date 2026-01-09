@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="css/chatbot.css">
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -35,7 +36,7 @@
                         'marquee': 'marquee 30s linear infinite',
                         'marquee-slow': 'marquee 45s linear infinite',
                         'glitch': 'glitch 0.2s steps(4)',
-                        'shake': 'shake 0.2s linear 3',
+                        // 'shake' removed
                         'pop-in': 'pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
                     },
                     keyframes: {
@@ -122,6 +123,28 @@
         h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.1; }
         p { line-height: 1.6; }
         button, a { min-height: 44px; }
+
+        /* ========================================
+           FEATURE CARD ANIMATIONS (Subtle Lift & Glow)
+           ======================================== */
+        .feature-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1),
+                        box-shadow 0.3s ease-out;
+            will-change: transform;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Icon Behaviors */
+        .feature-icon {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-block;
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-background-light font-display text-black antialiased selection:bg-black selection:text-primary relative overflow-x-hidden">
@@ -678,45 +701,7 @@
       </div>
     </div>
 
-    <!-- CHATBOT WIDGET -->
-    <div id="chatWidget" class="chat-widget">
-      <button class="chat-bubble" id="chatBubble" onclick="openChat()">
-        <span class="chat-icon">💬</span>
-        <span class="chat-pulse"></span>
-      </button>
-      <div class="chat-window" id="chatWindow">
-        <div class="chat-header">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-black rounded-none flex items-center justify-center text-primary font-black">🤖</div>
-            <div>
-              <span class="font-black block text-sm">TECHBOT</span>
-              <span class="text-[10px] opacity-70">Online • Instant replies</span>
-            </div>
-          </div>
-          <button onclick="closeChat()" class="text-xl font-black hover:scale-110">×</button>
-        </div>
-        <div class="chat-messages-area" id="chatMessagesArea">
-          <div class="msg-bubble bot-msg">
-            <p>👋 Hey! I'm TechBot, your instant assistant.</p>
-            <p class="mt-1">What can I help you with today?</p>
-          </div>
-          <!-- Quick Reply Buttons -->
-          <div id="quickReplies" class="quick-replies">
-            <button onclick="quickReply('💰 Get a sell quote')" class="quick-btn">💰 Sell my device</button>
-            <button onclick="quickReply('🔧 Repair pricing')" class="quick-btn">🔧 Repair pricing</button>
-            <button onclick="quickReply('📦 Check inventory')" class="quick-btn">📦 Check inventory</button>
-            <button onclick="quickReply('⏰ Store hours')" class="quick-btn">⏰ Store hours</button>
-            <button onclick="quickReply('📍 Get directions')" class="quick-btn">📍 Get directions</button>
-          </div>
-        </div>
-        <div class="chat-input-container">
-          <input type="text" id="chatInput" onkeypress="chatKeyPress(event)" placeholder="Type a message...">
-          <button onclick="sendChatMessage()" class="send-btn">
-            <span class="material-symbols-outlined">send</span>
-          </button>
-        </div>
-      </div>
-    </div>
+
 
     <style>
     /* Modal Styles */
@@ -827,91 +812,8 @@
       }
     }
 
-    // CHATBOT
-    function openChat() { 
-      document.getElementById('chatWindow').style.display = 'flex'; 
-      document.getElementById('chatBubble').style.display = 'none';
-    }
-    function closeChat() { 
-      document.getElementById('chatWindow').style.display = 'none'; 
-      document.getElementById('chatBubble').style.display = 'flex';
-    }
-    function chatKeyPress(e) { if(e.key === 'Enter') sendChatMessage(); }
 
-    // QUICK REPLY HANDLER
-    function quickReply(message) {
-      const area = document.getElementById('chatMessagesArea');
-      const quickRepliesEl = document.getElementById('quickReplies');
-      
-      // Hide quick replies after use
-      if (quickRepliesEl) quickRepliesEl.style.display = 'none';
-      
-      // Add user message
-      area.innerHTML += `<div class="msg-bubble user-msg">${message}</div>`;
-      
-      // Prepare contextual responses
-      const responses = {
-        '💰 Get a sell quote': '💰 Great! To get an instant quote, use our calculator above. Select your device type, brand, model, and condition. We pay top dollar and offer same-day payment!',
-        '🔧 Repair pricing': '🔧 Our repair prices:\n• Screen repair: $49-$299\n• Battery: $39-$99\n• Charging port: $49-$99\n• Water damage: $79-$199\n\nMost repairs done in under an hour!',
-        '📦 Check inventory': '📦 We have a fresh selection of certified pre-owned phones, tablets, and laptops. Visit our Inventory page to see what\'s in stock. New arrivals daily!',
-        '⏰ Store hours': '⏰ We\'re open 7 days a week!\n• Mon-Sat: 10AM - 8PM\n• Sunday: 11AM - 6PM\n\n📍 1134 Liberty Ave, Brooklyn',
-        '📍 Get directions': '📍 We\'re at 1134 Liberty Ave, Brooklyn NY 11208.\n\n🚗 Street parking available\n🚇 A Train to Grant Ave\n\n<a href="https://www.google.com/maps/dir/?api=1&destination=1134+Liberty+Ave+Brooklyn+NY+11208" target="_blank" class="underline font-black">→ Open in Google Maps</a>'
-      };
-      
-      // Bot response
-      setTimeout(() => {
-        const reply = responses[message] || '🤖 Happy to help! For immediate assistance, call us at (929) 789-2786.';
-        area.innerHTML += `<div class="msg-bubble bot-msg">${reply.replace(/\n/g, '<br>')}</div>`;
-        area.scrollTop = area.scrollHeight;
-      }, 500);
-      
-      area.scrollTop = area.scrollHeight;
-    }
-    
-    async function sendChatMessage() {
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-      
-      const area = document.getElementById('chatMessagesArea');
-      const quickRepliesEl = document.getElementById('quickReplies');
-      if (quickRepliesEl) quickRepliesEl.style.display = 'none';
-      
-      area.innerHTML += `<div class="msg-bubble user-msg">${text}</div>`;
-      input.value = '';
-      area.scrollTop = area.scrollHeight;
-
-      // Show typing indicator
-      area.innerHTML += `<div id="typingIndicator" class="msg-bubble bot-msg opacity-60">🤖 Typing...</div>`;
-
-      try {
-        if (!GROQ_KEY) throw new Error('No API key');
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${GROQ_KEY}` },
-          body: JSON.stringify({
-            messages: [
-              { role: "system", content: "You are TechBot, a helpful assistant for Mobile Experts Brooklyn (phone repair & buyback store). Be brief, helpful, and use the brutalist style. Store hours: Mon-Sat 10AM-8PM, Sun 11AM-6PM. Phone: (929) 789-2786. Address: 1134 Liberty Ave, Brooklyn NY 11208." },
-              { role: "user", content: text }
-            ],
-            model: "llama3-8b-8192"
-          })
-        });
-        const data = await res.json();
-        document.getElementById('typingIndicator')?.remove();
-        const reply = data.choices[0].message.content;
-        area.innerHTML += `<div class="msg-bubble bot-msg">🤖 ${reply}</div>`;
-      } catch (e) {
-        document.getElementById('typingIndicator')?.remove();
-        area.innerHTML += `<div class="msg-bubble bot-msg">🤖 I'm here to help! For the fastest response, call us at <a href="tel:9297892786" class="underline font-black">(929) 789-2786</a></div>`;
-      }
-      area.scrollTop = area.scrollHeight;
-    }
-
-    // NAVIGATE TO GOOGLE MAPS
-    function navigateToMaps() {
-      window.open('https://www.google.com/maps/dir/?api=1&destination=1134+Liberty+Ave+Brooklyn+NY+11208', '_blank');
-    }
     </script>
+    <script src="js/chatbot.js"></script>
 </body>
 </html>
