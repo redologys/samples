@@ -189,20 +189,38 @@
                 </div>
             </div>
 
-            <!-- Header -->
-            <header class="flex flex-col border-b-[3px] border-black md:flex-row bg-white">
-                <div class="flex items-center justify-between border-b-[3px] border-black bg-primary px-6 py-5 md:w-auto md:border-b-0 md:border-r-[3px]">
-                    <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
-                        <span class="material-symbols-outlined text-4xl font-black">inventory_2</span>
-                        <h1 class="text-2xl font-black uppercase leading-none tracking-tighter">DEVICE<br>SHOP</h1>
+            <!-- TopNavBar -->
+            <header class="flex flex-col border-b-[3px] border-black md:flex-row sticky top-0 z-40 bg-white">
+                <div class="flex items-center justify-between border-b-[3px] border-black bg-primary px-6 py-5 md:w-auto md:border-b-0 md:border-r-[3px] md:py-6">
+                    <div class="flex items-center gap-3 hover:animate-glitch cursor-pointer" onclick="window.location.href='index.html'">
+                        <span class="material-symbols-outlined text-4xl font-black">bolt</span>
+                        <h1 class="text-2xl font-black uppercase leading-none tracking-tighter">MOBILE<br>EXPERTS</h1>
                     </div>
-                    <button id="open-menu" class="md:hidden p-2"><span class="material-symbols-outlined text-3xl">menu</span></button>
+                    <button id="open-menu" class="md:hidden p-2 hover:bg-black hover:text-white border-[3px] border-transparent hover:border-black rounded-none">
+                        <span class="material-symbols-outlined text-3xl">menu</span>
+                    </button>
                 </div>
-                <nav class="hidden md:flex flex-1 items-center justify-end px-6 gap-4">
-                    <a href="index.html" class="font-bold uppercase hover:text-primary transition-colors">Home</a>
-                    <a href="repairs.html" class="font-bold uppercase hover:text-primary transition-colors">Repairs</a>
-                    <a href="sell.html" class="font-bold uppercase hover:text-primary transition-colors">Sell</a>
-                    <a href="contact.html" class="bg-black text-white px-6 py-2 font-bold uppercase hover:bg-primary hover:text-black transition-colors">Contact</a>
+                <nav class="hidden md:flex flex-1 flex-row">
+                    <a href="repairs.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">build</span>
+                        Repairs
+                    </a>
+                    <a href="inventory.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-primary px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">inventory_2</span>
+                        Inventory
+                    </a>
+                    <a href="sell.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">payments</span>
+                        Sell
+                    </a>
+                    <a href="phone-services.html" class="flex flex-1 items-center justify-center border-r-[3px] border-black bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">sim_card</span>
+                        Services
+                    </a>
+                    <a href="contact.html" class="flex flex-1 items-center justify-center bg-white px-6 py-4 text-lg font-bold uppercase brutalist-nav-link whitespace-nowrap">
+                        <span class="mr-2 hidden material-symbols-outlined md:inline-block">mail</span>
+                        Contact
+                    </a>
                 </nav>
             </header>
 
