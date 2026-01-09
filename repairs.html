@@ -236,7 +236,7 @@
                     <button onclick="window.location.href='contact.html'" class="brutalist-btn bg-black text-white border-[3px] border-black px-8 py-4 text-lg font-bold uppercase hover:bg-white hover:text-black shadow-[8px_8px_0px_0px_#ffffff] active:scale-95">
                         Book Appointment
                     </button>
-                    <button onclick="window.location.href='sell.html'" class="brutalist-btn bg-transparent text-black border-[3px] border-black px-8 py-4 text-lg font-bold uppercase hover:bg-black hover:text-white active:scale-95">
+                    <button onclick="document.getElementById('repair-calculator').scrollIntoView({behavior: 'smooth'})" class="brutalist-btn bg-transparent text-black border-[3px] border-black px-8 py-4 text-lg font-bold uppercase hover:bg-black hover:text-white active:scale-95">
                         Get Instant Quote
                     </button>
                 </div>
@@ -316,6 +316,133 @@
                             View Services <span class="material-symbols-outlined">arrow_forward</span>
                         </a>
                     </div>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 INTERACTIVE REPAIR CALCULATOR
+                 ======================================== -->
+            <section id="repair-calculator" class="reveal-on-scroll border-b-[3px] border-black bg-white py-16 px-4 md:px-16">
+                
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4">GET YOUR INSTANT REPAIR QUOTE</h2>
+                    <p class="text-lg font-bold text-black/70">Select your device and repairs for accurate pricing • 60-second estimate</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto border-[3px] border-black p-8 md:p-12 shadow-[8px_8px_0px_0px_black]">
+                    
+                    <!-- Progress Bar -->
+                    <div class="flex items-center justify-between mb-12">
+                        <div class="flex flex-col items-center">
+                            <div id="prog-step-1" class="w-10 h-10 flex items-center justify-center bg-primary border-[3px] border-black font-black">1</div>
+                            <span class="text-xs font-bold mt-2 uppercase">Device</span>
+                        </div>
+                        <div class="flex-1 h-1 bg-gray-200 mx-2"><div id="prog-line-1" class="h-full bg-primary w-0 transition-all duration-500"></div></div>
+                        <div class="flex flex-col items-center">
+                            <div id="prog-step-2" class="w-10 h-10 flex items-center justify-center bg-gray-200 border-[3px] border-black font-black">2</div>
+                            <span class="text-xs font-bold mt-2 uppercase">Model</span>
+                        </div>
+                        <div class="flex-1 h-1 bg-gray-200 mx-2"><div id="prog-line-2" class="h-full bg-primary w-0 transition-all duration-500"></div></div>
+                        <div class="flex flex-col items-center">
+                            <div id="prog-step-3" class="w-10 h-10 flex items-center justify-center bg-gray-200 border-[3px] border-black font-black">3</div>
+                            <span class="text-xs font-bold mt-2 uppercase">Repairs</span>
+                        </div>
+                        <div class="flex-1 h-1 bg-gray-200 mx-2"><div id="prog-line-3" class="h-full bg-primary w-0 transition-all duration-500"></div></div>
+                        <div class="flex flex-col items-center">
+                            <div id="prog-step-4" class="w-10 h-10 flex items-center justify-center bg-gray-200 border-[3px] border-black font-black">4</div>
+                            <span class="text-xs font-bold mt-2 uppercase">Quote</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Device Selection -->
+                    <div id="calc-step-1" class="calc-step">
+                        <h3 class="text-2xl font-black uppercase mb-6">Choose Your Device</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="calc-device-card border-[3px] border-black p-6 text-center cursor-pointer hover:bg-primary hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_black]" onclick="calcSelectDevice('iPhone')">
+                                <div class="text-5xl mb-3">📱</div>
+                                <div class="text-xl font-black uppercase">iPhone</div>
+                                <div class="text-sm text-black/60">All models</div>
+                            </div>
+                            <div class="calc-device-card border-[3px] border-black p-6 text-center cursor-pointer hover:bg-primary hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_black]" onclick="calcSelectDevice('Samsung')">
+                                <div class="text-5xl mb-3">📱</div>
+                                <div class="text-xl font-black uppercase">Samsung</div>
+                                <div class="text-sm text-black/60">Galaxy series</div>
+                            </div>
+                            <div class="calc-device-card border-[3px] border-black p-6 text-center cursor-pointer hover:bg-primary hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_black]" onclick="calcSelectDevice('GooglePixel')">
+                                <div class="text-5xl mb-3">📱</div>
+                                <div class="text-xl font-black uppercase">Google Pixel</div>
+                                <div class="text-sm text-black/60">All Pixels</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Model Selection -->
+                    <div id="calc-step-2" class="calc-step hidden">
+                        <h3 class="text-2xl font-black uppercase mb-6">Select Your Model</h3>
+                        <select id="calc-model-select" class="w-full border-[3px] border-black p-4 text-lg font-bold focus:outline-none focus:border-primary focus:shadow-[4px_4px_0px_0px_#FFD600]">
+                            <option value="">-- Choose a model --</option>
+                        </select>
+                        <div class="flex gap-4 mt-6">
+                            <button onclick="calcPrevStep()" class="border-[3px] border-black px-6 py-3 font-bold uppercase hover:bg-black hover:text-primary">← Back</button>
+                            <button onclick="calcNextStep()" class="flex-1 bg-primary border-[3px] border-black px-6 py-3 font-bold uppercase hover:bg-black hover:text-primary">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Repair Selection -->
+                    <div id="calc-step-3" class="calc-step hidden">
+                        <h3 class="text-2xl font-black uppercase mb-2">What Needs Repair?</h3>
+                        <p class="text-black/60 mb-6">Select all that apply</p>
+                        <div id="calc-repair-options" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="flex gap-4 mt-6">
+                            <button onclick="calcPrevStep()" class="border-[3px] border-black px-6 py-3 font-bold uppercase hover:bg-black hover:text-primary">← Back</button>
+                            <button onclick="calcCalculate()" class="flex-1 bg-black text-primary border-[3px] border-black px-6 py-3 font-bold uppercase hover:bg-primary hover:text-black">Calculate Estimate →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Loading -->
+                    <div id="calc-step-4-loading" class="calc-step hidden text-center py-12">
+                        <div class="inline-block w-16 h-16 border-4 border-primary border-t-black rounded-full animate-spin mb-4"></div>
+                        <div class="text-xl font-black" id="calc-loading-text">Analyzing repair costs...</div>
+                    </div>
+
+                    <!-- Step 4: Results -->
+                    <div id="calc-step-4-results" class="calc-step hidden">
+                        <div class="bg-primary border-[3px] border-black p-8 text-center mb-6">
+                            <div class="text-sm font-bold uppercase mb-2">Your Estimate</div>
+                            <div id="calc-price-display" class="text-5xl md:text-6xl font-black">$0 - $0</div>
+                            <div class="text-sm font-bold mt-2">Estimated time: 45-60 minutes</div>
+                        </div>
+
+                        <div class="border-[3px] border-black p-6 mb-6">
+                            <h4 class="text-lg font-black uppercase mb-4">Price Breakdown</h4>
+                            <div id="calc-breakdown" class="space-y-2 font-bold"></div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+                            <div class="p-4 border-[2px] border-black">
+                                <div class="text-2xl mb-1">✓</div>
+                                <div class="text-xs font-black uppercase">90-Day Warranty</div>
+                            </div>
+                            <div class="p-4 border-[2px] border-black">
+                                <div class="text-2xl mb-1">⚡</div>
+                                <div class="text-xs font-black uppercase">Same-Day Service</div>
+                            </div>
+                            <div class="p-4 border-[2px] border-black">
+                                <div class="text-2xl mb-1">⭐</div>
+                                <div class="text-xs font-black uppercase">Original Parts</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="window.location.href='contact.html'" class="bg-black text-primary border-[3px] border-black py-4 font-black uppercase hover:bg-primary hover:text-black">Book Appointment →</button>
+                            <button onclick="window.location.href='tel:9297892786'" class="bg-primary border-[3px] border-black py-4 font-black uppercase hover:bg-black hover:text-primary">Call Now: (929) 789-2786</button>
+                        </div>
+
+                        <button onclick="calcReset()" class="w-full mt-4 text-center text-black/60 font-bold underline hover:text-black">← Start over with different device</button>
+                    </div>
+
                 </div>
             </section>
 
@@ -860,6 +987,208 @@
       area.appendChild(msg); area.scrollTop = area.scrollHeight;
     }
     function chatKeyPress(e) { if (e.key === 'Enter') sendChatMessage(); }
+
+    // ========================================
+    // REPAIR CALCULATOR
+    // ========================================
+    let calcStep = 1;
+    let calcBrand = '';
+    let calcModel = '';
+    let calcRepairs = [];
+
+    const calcPrices = {
+        iPhone: {
+            '15 Pro Max': { screen: 379, battery: 99, charging: 89, water: 149, backGlass: 169, camera: 129, speaker: 79 },
+            '15 Pro': { screen: 349, battery: 99, charging: 89, water: 149, backGlass: 149, camera: 119, speaker: 79 },
+            '15': { screen: 279, battery: 89, charging: 79, water: 129, backGlass: 129, camera: 99, speaker: 69 },
+            '14 Pro Max': { screen: 329, battery: 89, charging: 79, water: 129, backGlass: 149, camera: 109, speaker: 69 },
+            '14 Pro': { screen: 299, battery: 89, charging: 79, water: 129, backGlass: 129, camera: 99, speaker: 69 },
+            '14': { screen: 249, battery: 79, charging: 69, water: 109, backGlass: 109, camera: 89, speaker: 59 },
+            '13 Pro Max': { screen: 279, battery: 79, charging: 69, water: 109, backGlass: 129, camera: 99, speaker: 59 },
+            '13': { screen: 219, battery: 69, charging: 59, water: 99, backGlass: 99, camera: 79, speaker: 49 },
+            '12': { screen: 199, battery: 69, charging: 59, water: 89, backGlass: 89, camera: 69, speaker: 49 },
+            '11': { screen: 169, battery: 59, charging: 49, water: 79, backGlass: 79, camera: 59, speaker: 49 },
+        },
+        Samsung: {
+            'S24 Ultra': { screen: 359, battery: 99, charging: 89, water: 139, backGlass: 149, camera: 119, speaker: 79 },
+            'S24+': { screen: 299, battery: 89, charging: 79, water: 129, backGlass: 129, camera: 99, speaker: 69 },
+            'S23 Ultra': { screen: 329, battery: 89, charging: 79, water: 129, backGlass: 139, camera: 109, speaker: 69 },
+            'S23': { screen: 239, battery: 79, charging: 69, water: 109, backGlass: 99, camera: 79, speaker: 59 },
+            'S22': { screen: 219, battery: 69, charging: 59, water: 99, backGlass: 89, camera: 69, speaker: 49 },
+        },
+        GooglePixel: {
+            'Pixel 8 Pro': { screen: 279, battery: 89, charging: 79, water: 119, backGlass: 129, camera: 99, speaker: 69 },
+            'Pixel 8': { screen: 239, battery: 79, charging: 69, water: 109, backGlass: 109, camera: 89, speaker: 59 },
+            'Pixel 7 Pro': { screen: 249, battery: 79, charging: 69, water: 109, backGlass: 119, camera: 89, speaker: 59 },
+            'Pixel 7': { screen: 219, battery: 69, charging: 59, water: 99, backGlass: 99, camera: 79, speaker: 49 },
+        }
+    };
+
+    const repairTypes = [
+        { id: 'screen', label: 'Screen Replacement' },
+        { id: 'battery', label: 'Battery Replacement' },
+        { id: 'charging', label: 'Charging Port' },
+        { id: 'water', label: 'Water Damage' },
+        { id: 'backGlass', label: 'Back Glass' },
+        { id: 'camera', label: 'Camera Repair' },
+        { id: 'speaker', label: 'Speaker/Microphone' },
+    ];
+
+    function calcSelectDevice(brand) {
+        calcBrand = brand;
+        document.querySelectorAll('.calc-device-card').forEach(c => c.classList.remove('bg-primary'));
+        event.target.closest('.calc-device-card').classList.add('bg-primary');
+        setTimeout(() => calcGoToStep(2), 300);
+    }
+
+    function calcGoToStep(step) {
+        // Hide all steps
+        document.querySelectorAll('.calc-step').forEach(s => s.classList.add('hidden'));
+        
+        // Update progress
+        for (let i = 1; i <= 4; i++) {
+            const stepEl = document.getElementById(`prog-step-${i}`);
+            const lineEl = document.getElementById(`prog-line-${i}`);
+            if (i <= step) {
+                stepEl?.classList.remove('bg-gray-200');
+                stepEl?.classList.add('bg-primary');
+            } else {
+                stepEl?.classList.add('bg-gray-200');
+                stepEl?.classList.remove('bg-primary');
+            }
+            if (lineEl) lineEl.style.width = i < step ? '100%' : '0%';
+        }
+
+        calcStep = step;
+
+        if (step === 2) {
+            const select = document.getElementById('calc-model-select');
+            select.innerHTML = '<option value="">-- Choose a model --</option>';
+            Object.keys(calcPrices[calcBrand]).forEach(model => {
+                select.innerHTML += `<option value="${model}">${model}</option>`;
+            });
+            document.getElementById('calc-step-2').classList.remove('hidden');
+        } else if (step === 3) {
+            const container = document.getElementById('calc-repair-options');
+            container.innerHTML = '';
+            repairTypes.forEach(repair => {
+                const price = calcPrices[calcBrand][calcModel][repair.id];
+                container.innerHTML += `
+                    <div class="calc-repair-opt border-[2px] border-gray-300 p-4 flex items-center gap-3 cursor-pointer hover:bg-primary/20" onclick="calcToggleRepair('${repair.id}', this)">
+                        <div class="w-6 h-6 border-[2px] border-black flex items-center justify-center"><span class="checkmark hidden font-black text-primary">✓</span></div>
+                        <div class="flex-1"><div class="font-bold">${repair.label}</div><div class="text-sm text-black/60">Starting at $${price}</div></div>
+                    </div>
+                `;
+            });
+            document.getElementById('calc-step-3').classList.remove('hidden');
+        } else if (step === 1) {
+            document.getElementById('calc-step-1').classList.remove('hidden');
+        }
+    }
+
+    function calcNextStep() {
+        if (calcStep === 2) {
+            calcModel = document.getElementById('calc-model-select').value;
+            if (!calcModel) { alert('Please select a model'); return; }
+            calcGoToStep(3);
+        }
+    }
+
+    function calcPrevStep() {
+        if (calcStep === 2) calcGoToStep(1);
+        else if (calcStep === 3) calcGoToStep(2);
+    }
+
+    function calcToggleRepair(repairId, element) {
+        const idx = calcRepairs.indexOf(repairId);
+        const checkmark = element.querySelector('.checkmark');
+        if (idx > -1) {
+            calcRepairs.splice(idx, 1);
+            checkmark.classList.add('hidden');
+            element.classList.remove('bg-primary', 'border-black');
+            element.classList.add('border-gray-300');
+        } else {
+            calcRepairs.push(repairId);
+            checkmark.classList.remove('hidden');
+            element.classList.add('bg-primary', 'border-black');
+            element.classList.remove('border-gray-300');
+        }
+    }
+
+    function calcCalculate() {
+        if (calcRepairs.length === 0) { alert('Please select at least one repair'); return; }
+        
+        document.querySelectorAll('.calc-step').forEach(s => s.classList.add('hidden'));
+        document.getElementById('calc-step-4-loading').classList.remove('hidden');
+        
+        // Update progress to step 4
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById(`prog-step-${i}`)?.classList.remove('bg-gray-200');
+            document.getElementById(`prog-step-${i}`)?.classList.add('bg-primary');
+            if (i < 4) document.getElementById(`prog-line-${i}`).style.width = '100%';
+        }
+
+        const loadingTexts = ['Analyzing repair costs...', 'Checking parts availability...', 'Calculating total...'];
+        let textIdx = 0;
+        const textInterval = setInterval(() => {
+            textIdx++;
+            if (textIdx < loadingTexts.length) {
+                document.getElementById('calc-loading-text').textContent = loadingTexts[textIdx];
+            }
+        }, 800);
+
+        setTimeout(() => {
+            clearInterval(textInterval);
+            showCalcResults();
+        }, 2500);
+    }
+
+    function showCalcResults() {
+        let total = 0;
+        let breakdownHTML = '';
+        
+        calcRepairs.forEach(repairId => {
+            const price = calcPrices[calcBrand][calcModel][repairId];
+            total += price;
+            const label = repairTypes.find(r => r.id === repairId).label;
+            breakdownHTML += `<div class="flex justify-between border-b border-black/20 pb-2"><span>${label}</span><span>$${price}</span></div>`;
+        });
+
+        const minPrice = Math.floor(total * 0.92);
+        const maxPrice = Math.ceil(total * 1.08);
+
+        breakdownHTML += `<div class="flex justify-between pt-2 text-lg"><span class="font-black">TOTAL</span><span class="font-black">$${minPrice} - $${maxPrice}</span></div>`;
+
+        document.getElementById('calc-step-4-loading').classList.add('hidden');
+        document.getElementById('calc-step-4-results').classList.remove('hidden');
+        document.getElementById('calc-breakdown').innerHTML = breakdownHTML;
+        
+        // Animate price
+        let currentMin = 0, currentMax = 0;
+        const interval = setInterval(() => {
+            currentMin = Math.min(currentMin + Math.ceil(minPrice / 30), minPrice);
+            currentMax = Math.min(currentMax + Math.ceil(maxPrice / 30), maxPrice);
+            document.getElementById('calc-price-display').textContent = `$${currentMin} - $${currentMax}`;
+            if (currentMin >= minPrice && currentMax >= maxPrice) clearInterval(interval);
+        }, 50);
+    }
+
+    function calcReset() {
+        calcStep = 1;
+        calcBrand = '';
+        calcModel = '';
+        calcRepairs = [];
+        document.querySelectorAll('.calc-device-card').forEach(c => c.classList.remove('bg-primary'));
+        document.querySelectorAll('.calc-step').forEach(s => s.classList.add('hidden'));
+        document.getElementById('calc-step-1').classList.remove('hidden');
+        for (let i = 1; i <= 4; i++) {
+            const stepEl = document.getElementById(`prog-step-${i}`);
+            const lineEl = document.getElementById(`prog-line-${i}`);
+            if (i === 1) { stepEl?.classList.add('bg-primary'); stepEl?.classList.remove('bg-gray-200'); }
+            else { stepEl?.classList.remove('bg-primary'); stepEl?.classList.add('bg-gray-200'); }
+            if (lineEl) lineEl.style.width = '0%';
+        }
+    }
     </script>
 </body>
 </html>
